@@ -7,6 +7,8 @@ import android.view.View;
 
 import android.content.IntentSender;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -43,6 +45,16 @@ public class MainActivity extends AppCompatActivity implements OnDataPointListen
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //button functionality to CreateProfile activity
+        Button button = findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CreateProfile.class);
+                startActivity(intent);
+            }
+        });
 
         if (savedInstanceState != null) {
             authInProgress = savedInstanceState.getBoolean(AUTH_PENDING);
@@ -174,20 +186,4 @@ public class MainActivity extends AppCompatActivity implements OnDataPointListen
         super.onSaveInstanceState(outState);
         outState.putBoolean(AUTH_PENDING, authInProgress);
     }
-
-
-    //implement Google account sign in to access CreateProfile activity
-
-    //changing activity functions
-    public void toCreateProfile(View view)
-    {
-        Intent intent = new Intent(this, CreateProfile.class);
-        startActivity(intent);
-    }
-    public void toHomePage(View view)
-    {
-        Intent intent = new Intent(this, HomePage.class);
-        startActivity(intent);
-    }
-
 }
