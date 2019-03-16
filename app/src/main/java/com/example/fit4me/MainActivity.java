@@ -1,5 +1,6 @@
 package com.example.fit4me;
 
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements OnDataPointListen
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -51,6 +53,10 @@ public class MainActivity extends AppCompatActivity implements OnDataPointListen
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Start the background stepcounter.
+                Intent intentBackground = new Intent(MainActivity.this, BackgroundAppService.class);
+                startService(intentBackground);
+
                 Intent intent = new Intent(MainActivity.this, CreateProfile.class);
                 startActivity(intent);
             }
