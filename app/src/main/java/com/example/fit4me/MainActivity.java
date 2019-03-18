@@ -1,6 +1,7 @@
 package com.example.fit4me;
 
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,19 +26,15 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.FitnessStatusCodes;
-import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
-import com.google.android.gms.fitness.data.DataSource;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
-import com.google.android.gms.fitness.data.Value;
-import com.google.android.gms.fitness.request.OnDataPointListener;
 import com.google.android.gms.fitness.result.DailyTotalResult;
 
 import java.util.concurrent.TimeUnit;
 
 
-public class MainActivity extends AppCompatActivity implements OnDataPointListener,
+public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
@@ -67,17 +64,24 @@ public class MainActivity extends AppCompatActivity implements OnDataPointListen
             @Override
             public void onClick(View v) {
                 //Start the background stepcounter.
-                Intent intentBackground = new Intent(MainActivity.this, BackgroundAppService.class);
-                startService(intentBackground);
+                //Intent intentBackground = new Intent(MainActivity.this, BackgroundAppService.class);
+                //startService(intentBackground);
 
                 Intent intent = new Intent(MainActivity.this, CreateProfile.class);
                 startActivity(intent);
             }
         });
 
-        if (savedInstanceState != null) {
+        Button stepsButton = findViewById(R.id.stepsButton);
+        stepsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new GetDailyStepCount().execute();
+            }
+        });
+
+        if (savedInstanceState != null)
             authInProgress = savedInstanceState.getBoolean(AUTH_PENDING);
-        }
 
         mApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Fitness.RECORDING_API)
@@ -89,8 +93,6 @@ public class MainActivity extends AppCompatActivity implements OnDataPointListen
                 .enableAutoManage(this, 0, this)
                 .build();
         mApiClient.connect();
-        new VerifyDataTask().execute();
-        Toast.makeText(getApplicationContext(), "Daily Steps: " + dailySteps, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -103,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements OnDataPointListen
         Fitness.RecordingApi.subscribe(mApiClient, DataType.TYPE_STEP_COUNT_CUMULATIVE)
                 .setResultCallback(new ResultCallback<Status>() {
                     @Override
-                    public void onResult(Status status) {
+                    public void onResult(@NonNull Status status) {
                         if (status.isSuccess()) {
                             if (status.getStatusCode() == FitnessStatusCodes.SUCCESS_ALREADY_SUBSCRIBED)
                                 Log.i(TAG, "Existing subscription for activity detected.");
@@ -123,48 +125,28 @@ public class MainActivity extends AppCompatActivity implements OnDataPointListen
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         if( !authInProgress ) {
             try {
                 authInProgress = true;
                 connectionResult.startResolutionForResult( MainActivity.this, REQUEST_OAUTH );
-            } catch(IntentSender.SendIntentException e ) {
-
-            }
-        } else {
+            } catch(IntentSender.SendIntentException e ) { }
+        } else
             Log.e( "GoogleFit", "authInProgress" );
-        }
-
-    }
-
-    @Override
-    public void onDataPoint(DataPoint dataPoint) {
-        for( final Field field : dataPoint.getDataType().getFields() ) {
-            final Value value = dataPoint.getValue( field );
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(), "Field: " + field.getName() + " Value: " + value, Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if( requestCode == REQUEST_OAUTH ) {
             authInProgress = false;
-            if( resultCode == RESULT_OK ) {
-                if( !mApiClient.isConnecting() && !mApiClient.isConnected() ) {
+            if( resultCode == RESULT_OK )
+                if( !mApiClient.isConnecting() && !mApiClient.isConnected() )
                     mApiClient.connect();
-                }
-            } else if( resultCode == RESULT_CANCELED ) {
+            else if( resultCode == RESULT_CANCELED )
                 Log.e( "GoogleFit", "RESULT_CANCELED" );
-            }
-        } else {
-            Log.e("GoogleFit", "requestCode NOT request_oauth");
         }
+        else
+            Log.e("GoogleFit", "requestCode NOT request_oauth");
     }
 
     @Override
@@ -174,28 +156,32 @@ public class MainActivity extends AppCompatActivity implements OnDataPointListen
     }
 
 
-    private class VerifyDataTask extends AsyncTask<Void, Void, Void> {
-        protected Void doInBackground(Void... params) {
+    private class GetDailyStepCount extends AsyncTask<Void, Void, Void> {
 
+        protected Void doInBackground(Void... params) {
             long total = 0;
 
             PendingResult<DailyTotalResult> result = Fitness.HistoryApi.readDailyTotal(mApiClient, DataType.TYPE_STEP_COUNT_DELTA);
             DailyTotalResult totalResult = result.await(30, TimeUnit.SECONDS);
             if (totalResult.getStatus().isSuccess()) {
                 DataSet totalSet = totalResult.getTotal();
-                if(totalSet.isEmpty())
+                if(totalSet == null || totalSet.isEmpty())
                     total = 0;
                 else
                     total = totalSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
-            } else {
+            } else
                 Log.w(TAG, "There was a problem getting the step count.");
-            }
 
             Log.i(TAG, "Total steps: " + total);
             dailySteps = total;
+            final long TOTAL_DAILY_STEPS = total;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "Steps taken : " + TOTAL_DAILY_STEPS, Toast.LENGTH_SHORT).show();
+                }
+            });
             return null;
         }
     }
-
-
 }
