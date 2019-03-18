@@ -9,8 +9,10 @@ import android.view.View;
 
 import android.content.IntentSender;
 import android.util.Log;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -51,6 +53,13 @@ public class MainActivity extends AppCompatActivity implements OnDataPointListen
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //logo animation
+        AlphaAnimation fadeIn = new AlphaAnimation(0.0f, 1.0f);
+        TextView logo = findViewById(R.id.logo);
+        logo.startAnimation(fadeIn);
+        fadeIn.setDuration(1500);
+        fadeIn.setFillAfter(true);
 
         //button functionality to CreateProfile activity
         Button button = findViewById(R.id.button);
