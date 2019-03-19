@@ -15,18 +15,20 @@
         android:text="Home Page"
         app:layout_constraintBottom_toTopOf="@+id/goalText"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
+        android:id="@+id/nameText"
+        android:layout_width="77dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="19dp"
-        android:text="Will display progress bar and walking avatar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="45dp"
+        app:layout_constraintBottom_toTopOf="@+id/goalText"
+        app:layout_constraintEnd_toStartOf="@+id/goalText" />
 
     <TextView
         android:id="@+id/goalText"

@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 public class HomePage extends AppCompatActivity {
 
+    private String [] extras;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -14,7 +16,15 @@ public class HomePage extends AppCompatActivity {
         setContentView(R.layout.activity_home_page);
 
         //receive arguments from CreateProfile Activity
-        String dailyGoal = getIntent().getStringExtra("stepGoalText");
+        extras = getIntent().getStringArrayExtra("arguments");
+        if(extras == null)
+        {
+            return;
+        }
+        String userName = extras[0];
+        String dailyGoal = extras[1];
+        TextView nameText = findViewById(R.id.nameText);
+        nameText.setText(userName);
         TextView goalText = findViewById(R.id.goalText);
         goalText.setText(dailyGoal);
     }
