@@ -95,6 +95,8 @@ public class MainActivity extends AppCompatActivity implements
         mApiClient.connect();
     }
 
+
+
     @Override
     public void onConnected(Bundle bundle) {
         subscribe();
@@ -159,8 +161,9 @@ public class MainActivity extends AppCompatActivity implements
     private class GetDailyStepCount extends AsyncTask<Void, Void, Void> { //not being called
 
         protected Void doInBackground(Void... params) {
+
             long total = 0;
-            HomePage progress = new HomePage();
+            //HomePage progress = new HomePage();
 
             PendingResult<DailyTotalResult> result = Fitness.HistoryApi.readDailyTotal(mApiClient, DataType.TYPE_STEP_COUNT_DELTA);
             DailyTotalResult totalResult = result.await(30, TimeUnit.SECONDS);
@@ -173,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements
                 else{
                     total = totalSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
                     Log.i("daily total", Integer.toString((int) total));
-                    progress.setData(total);
+                    //progress.setData(total);
                 }
 
             } else
