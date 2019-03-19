@@ -7,13 +7,10 @@ import android.widget.TextView;
 import android.widget.ProgressBar;
 
 public class HomePage extends AppCompatActivity {
-<<<<<<< HEAD
 
     private String [] extras;
-
-=======
     private int total;
->>>>>>> c6dd646ab0623df0e9e2f42464de0942aed364bb
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
