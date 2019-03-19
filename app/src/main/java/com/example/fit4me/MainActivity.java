@@ -156,19 +156,26 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    private class GetDailyStepCount extends AsyncTask<Void, Void, Void> {
+    private class GetDailyStepCount extends AsyncTask<Void, Void, Void> { //not being called
 
         protected Void doInBackground(Void... params) {
             long total = 0;
+            HomePage progress = new HomePage();
 
             PendingResult<DailyTotalResult> result = Fitness.HistoryApi.readDailyTotal(mApiClient, DataType.TYPE_STEP_COUNT_DELTA);
             DailyTotalResult totalResult = result.await(30, TimeUnit.SECONDS);
             if (totalResult.getStatus().isSuccess()) {
+
                 DataSet totalSet = totalResult.getTotal();
-                if(totalSet == null || totalSet.isEmpty())
+                if(totalSet == null || totalSet.isEmpty()) {
                     total = 0;
-                else
+                }
+                else{
                     total = totalSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
+                    Log.i("daily total", Integer.toString((int) total));
+                    progress.setData(total);
+                }
+
             } else
                 Log.w(TAG, "There was a problem getting the step count.");
 

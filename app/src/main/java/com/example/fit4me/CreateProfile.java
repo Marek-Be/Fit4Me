@@ -35,6 +35,7 @@ public class CreateProfile extends AppCompatActivity {
 
     }
 
+
     //way of creating user account based on goal information inputted
 
 }
