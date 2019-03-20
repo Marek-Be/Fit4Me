@@ -37,18 +37,26 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
-
     private static final int REQUEST_OAUTH = 1;
     private static final String AUTH_PENDING = "auth_state_pending";
+    private static final String APP_INTIALIZED = "initialized";
     private boolean authInProgress = false;
     private GoogleApiClient mApiClient;
     private static final String TAG = "Google Record API";
-    private long dailySteps;
+    private boolean initialized = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            initialized = savedInstanceState.getBoolean(APP_INTIALIZED);
+            if(initialized){
+                Intent intent = new Intent(MainActivity.this, HomePage.class);
+                startActivity(intent);
+            }
+            authInProgress = savedInstanceState.getBoolean(AUTH_PENDING);
+        }
         setContentView(R.layout.activity_main);
 
         //logo animation
@@ -63,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Start the background stepcounter.
                 //Intent intentBackground = new Intent(MainActivity.this, BackgroundAppService.class);
                 //startService(intentBackground);
 
@@ -80,9 +87,6 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        if (savedInstanceState != null)
-            authInProgress = savedInstanceState.getBoolean(AUTH_PENDING);
-
         mApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Fitness.RECORDING_API)
                 .addApi(Fitness.HISTORY_API)
@@ -93,6 +97,15 @@ public class MainActivity extends AppCompatActivity implements
                 .enableAutoManage(this, 0, this)
                 .build();
         mApiClient.connect();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //if(initialized){      //Uncomment to prevent returning to the main menu
+         //   Intent intent = new Intent(MainActivity.this, HomePage.class);
+        //    startActivity(intent);
+        //}
     }
 
     @Override
@@ -116,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements
                             Log.w(TAG, "There was a problem subscribing.");
                     }
                 });
+        initialized = true;
     }
 
 
@@ -153,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(AUTH_PENDING, authInProgress);
+        outState.putBoolean(APP_INTIALIZED, initialized);
     }
 
 
@@ -160,27 +175,24 @@ public class MainActivity extends AppCompatActivity implements
 
         protected Void doInBackground(Void... params) {
             long total = 0;
-            HomePage progress = new HomePage();
 
             PendingResult<DailyTotalResult> result = Fitness.HistoryApi.readDailyTotal(mApiClient, DataType.TYPE_STEP_COUNT_DELTA);
             DailyTotalResult totalResult = result.await(30, TimeUnit.SECONDS);
             if (totalResult.getStatus().isSuccess()) {
 
                 DataSet totalSet = totalResult.getTotal();
-                if(totalSet == null || totalSet.isEmpty()) {
+                if(totalSet == null || totalSet.isEmpty())
                     total = 0;
-                }
                 else{
                     total = totalSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
                     Log.i("daily total", Integer.toString((int) total));
-                    progress.setData(total);
                 }
 
-            } else
+            }
+            else
                 Log.w(TAG, "There was a problem getting the step count.");
 
             Log.i(TAG, "Total steps: " + total);
-            dailySteps = total;
             final long TOTAL_DAILY_STEPS = total;
             runOnUiThread(new Runnable() {
                 @Override

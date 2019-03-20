@@ -20,16 +20,18 @@ public class HomePage extends AppCompatActivity {
         //receive arguments from CreateProfile Activity
         extras = getIntent().getStringArrayExtra("arguments");
         if(extras == null)
-        {
             return;
-        }
         String userName = extras[0];
         String dailyGoal = extras[1];
         TextView nameText = findViewById(R.id.nameText);
         nameText.setText(userName);
         TextView goalText = findViewById(R.id.goalText);
         ProgressBar progress = findViewById(R.id.determinateBar);
-        progress.setMax(Integer.parseInt(dailyGoal));
+
+        int dailySteps = 0;
+        if(dailyGoal != null && dailyGoal.matches("\\d"))   //check dailyGoal contains an int
+            dailySteps = Integer.parseInt(dailyGoal);
+        progress.setMax(dailySteps);
         progress.setProgress(total);
 
         goalText.setText(dailyGoal);
