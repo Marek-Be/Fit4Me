@@ -24,7 +24,7 @@ public class HomePage extends AppCompatActivity {
         String userName = extras[0];
         String dailyGoal = extras[1];
         TextView nameText = findViewById(R.id.nameText);
-        nameText.setText(userName);
+        nameText.setText("Go " + userName + "!");
         TextView goalText = findViewById(R.id.goalText);
         ProgressBar progress = findViewById(R.id.determinateBar);
 
