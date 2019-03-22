@@ -26,7 +26,6 @@ public class HomePage extends AppCompatActivity {
     private static final String GOOGLE_FIT_TAG = "Google Fit API";
     private GoogleApiClient mApiClient;
     private String [] extras;
-    private int totalSteps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,12 +50,11 @@ public class HomePage extends AppCompatActivity {
         TextView goalText = findViewById(R.id.goalText);
         goalText.setText(dailyGoal);
 
+        //progress bar functionality
         ProgressBar progress = findViewById(R.id.determinateBar);
         int dailySteps = 0;
-        if(dailyGoal != null && dailyGoal.matches("\\d"))   //check dailyGoal contains an int
+        if(dailyGoal != null && dailyGoal.length() > 0)   //check dailyGoal contains an int
             dailySteps = Integer.parseInt(dailyGoal);
-        progress.setMax(dailySteps);
-        progress.setProgress(totalSteps);
         updateProgressBar();
     }
 
@@ -83,7 +81,6 @@ public class HomePage extends AppCompatActivity {
                 Log.w(GOOGLE_FIT_TAG, "There was a problem getting the step count.");
 
             Log.i(GOOGLE_FIT_TAG, "Total steps: " + total);
-            //totalSteps = (int) total;
             final int TOTAL_DAILY_STEPS = (int) total;
             runOnUiThread(new Runnable() {
                 @Override

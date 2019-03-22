@@ -1,15 +1,14 @@
 package com.example.fit4me;
 
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
-import android.view.View;
 
 import android.content.IntentSender;
 import android.util.Log;
 import android.view.animation.AlphaAnimation;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -33,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements
     private GoogleApiClient mApiClient;
     private static final String GOOGLE_FIT_TAG = "Google Fit API";
     private boolean initialized = false;
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -55,19 +55,6 @@ public class MainActivity extends AppCompatActivity implements
         fadeIn.setDuration(1500);
         fadeIn.setFillAfter(true);
 
-        //button functionality to CreateProfile activity
-        Button button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent intentBackground = new Intent(MainActivity.this, BackgroundAppService.class);
-                //startService(intentBackground);
-
-                Intent intent = new Intent(MainActivity.this, CreateProfile.class);
-                startActivity(intent);
-            }
-        });
-
         mApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Fitness.RECORDING_API)
                 .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ))
@@ -75,6 +62,16 @@ public class MainActivity extends AppCompatActivity implements
                 .enableAutoManage(this, 0, this)
                 .build();
         mApiClient.connect();
+
+        handler.postDelayed(new Runnable(){
+            @Override
+            public void run()
+            {
+                Intent intent = new Intent(MainActivity.this, CreateProfile.class);
+                startActivity(intent);
+            }
+        }, 9000);
+
     }
 
     @Override
