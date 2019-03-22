@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener {
     private static final int REQUEST_OAUTH = 1;
     private static final String AUTH_PENDING = "auth_state_pending";
-    private static final String APP_INTIALIZED = "initialized";
+    private static final String APP_INITIALIZED = "initialized";
     private boolean authInProgress = false;
     private GoogleApiClient mApiClient;
     private static final String GOOGLE_FIT_TAG = "Google Fit API";
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements
     {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            initialized = savedInstanceState.getBoolean(APP_INTIALIZED);
+            initialized = savedInstanceState.getBoolean(APP_INITIALIZED);
             if(initialized){
                 Intent intent = new Intent(MainActivity.this, HomePage.class);
                 startActivity(intent);
@@ -62,16 +62,6 @@ public class MainActivity extends AppCompatActivity implements
                 .enableAutoManage(this, 0, this)
                 .build();
         mApiClient.connect();
-
-        handler.postDelayed(new Runnable(){
-            @Override
-            public void run()
-            {
-                Intent intent = new Intent(MainActivity.this, CreateProfile.class);
-                startActivity(intent);
-            }
-        }, 9000);
-
     }
 
     @Override
@@ -81,6 +71,15 @@ public class MainActivity extends AppCompatActivity implements
          //   Intent intent = new Intent(MainActivity.this, HomePage.class);
         //    startActivity(intent);
         //}
+
+        handler.postDelayed(new Runnable(){
+            @Override
+            public void run()
+            {
+                Intent intent = new Intent(MainActivity.this, CreateProfile.class);
+                startActivity(intent);
+            }
+        }, 9000);
     }
 
     @Override
@@ -100,12 +99,12 @@ public class MainActivity extends AppCompatActivity implements
                                 Log.i(GOOGLE_FIT_TAG, "Existing subscription for activity detected.");
                             else
                                 Log.i(GOOGLE_FIT_TAG, "Successfully subscribed!");
+                            initialized = true;
                         }
                         else
                             Log.w(GOOGLE_FIT_TAG, "There was a problem subscribing.");
                     }
                 });
-        initialized = true;
     }
 
 
@@ -143,6 +142,6 @@ public class MainActivity extends AppCompatActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(AUTH_PENDING, authInProgress);
-        outState.putBoolean(APP_INTIALIZED, initialized);
+        outState.putBoolean(APP_INITIALIZED, initialized);
     }
 }

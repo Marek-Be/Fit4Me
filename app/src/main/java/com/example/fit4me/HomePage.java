@@ -26,6 +26,7 @@ public class HomePage extends AppCompatActivity {
     private static final String GOOGLE_FIT_TAG = "Google Fit API";
     private GoogleApiClient mApiClient;
     private String [] extras;
+    private int goal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,9 +53,9 @@ public class HomePage extends AppCompatActivity {
 
         //progress bar functionality
         ProgressBar progress = findViewById(R.id.determinateBar);
-        int dailySteps = 0;
         if(dailyGoal != null && dailyGoal.length() > 0)   //check dailyGoal contains an int
-            dailySteps = Integer.parseInt(dailyGoal);
+            goal = Integer.parseInt(dailyGoal);
+        progress.setMax(goal);
         updateProgressBar();
     }
 
@@ -85,7 +86,12 @@ public class HomePage extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getApplicationContext(), "Steps taken : " + TOTAL_DAILY_STEPS, Toast.LENGTH_SHORT).show();
+
+                    if(TOTAL_DAILY_STEPS > goal) {        //TODO put code for when they have achieved their goal here
+                        Toast.makeText(getApplicationContext(), "Congratulations. You have reached your goal.  Steps taken : " + TOTAL_DAILY_STEPS, Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                        Toast.makeText(getApplicationContext(), "Steps taken : " + TOTAL_DAILY_STEPS, Toast.LENGTH_SHORT).show();
                     ProgressBar progress = findViewById(R.id.determinateBar);
                     progress.setProgress(TOTAL_DAILY_STEPS);
                 }
