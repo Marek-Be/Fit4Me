@@ -37,9 +37,10 @@ public class HomePage extends AppCompatActivity {
         goalText.setText(dailyGoal);
     }
 
+    //display data from Google Fit API
     public void setData(long stepTotal){
         total = (int) stepTotal;
     }
 
-    //display data from Google Fit API
+
 }
