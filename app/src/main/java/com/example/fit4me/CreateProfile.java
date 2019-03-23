@@ -11,21 +11,28 @@ import android.widget.EditText;
 public class CreateProfile extends AppCompatActivity {
 
     private Button button;
+    private EditText nameInput;
     private EditText goalInput;
+    private View background;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_profile);
 
+
         //button functionality to HomePage activity
         button = findViewById(R.id.button2);
+        nameInput = findViewById(R.id.nameInput);
         goalInput = findViewById(R.id.goalInput);
+        nameInput.bringToFront();
+        goalInput.bringToFront();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CreateProfile.this, HomePage.class);
-                intent.putExtra("stepGoalText", goalInput.getText().toString());
+                String [] arguments = {nameInput.getText().toString(), goalInput.getText().toString()};
+                intent.putExtra("arguments", arguments);
                 startActivity(intent);
             }
         });
