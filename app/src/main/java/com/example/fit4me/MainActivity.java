@@ -22,15 +22,17 @@ import com.google.android.gms.fitness.FitnessStatusCodes;
 import com.google.android.gms.fitness.data.DataType;
 
 
-public class MainActivity extends AppCompatActivity implements
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity
+        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
     private static final int REQUEST_OAUTH = 1;
+    private static final int LOAD_TIME = 3000;
     private static final String AUTH_PENDING = "auth_state_pending";
     private static final String APP_INITIALIZED = "initialized";
+    private static final String GOOGLE_FIT_TAG = "Google Fit API";
+
     private boolean authInProgress = false;
     private GoogleApiClient mApiClient;
-    private static final String GOOGLE_FIT_TAG = "Google Fit API";
     private boolean initialized = false;
     private Handler handler = new Handler();
 
@@ -71,24 +73,39 @@ public class MainActivity extends AppCompatActivity implements
          //   Intent intent = new Intent(MainActivity.this, HomePage.class);
         //    startActivity(intent);
         //}
-
         handler.postDelayed(new Runnable(){
             @Override
             public void run()
             {
-                Intent intent = new Intent(MainActivity.this, CreateProfile.class);
-                startActivity(intent);
+                if(initialized) {
+                    Intent intent = new Intent(MainActivity.this, CreateProfile.class);
+                    startActivity(intent);
+                }
+                else {
+                    Log.i(GOOGLE_FIT_TAG, "Setting up API!");
+                    if(mApiClient.isConnected())
+                        subscribe();
+                    else if(!mApiClient.isConnecting())
+                        mApiClient.connect();
+                    handler.postDelayed(this, LOAD_TIME);
+                }
             }
-        }, 9000);
+        }, LOAD_TIME);
     }
 
+    @Override
+    protected void onStop(){
+        super.onStop();
+        handler.removeCallbacksAndMessages(null);
+    }
+    
     @Override
     public void onConnected(Bundle bundle) {
         subscribe();
     }
 
     //Create a subscription to the step count to get the Google API to start recording it.
-    public void subscribe() {
+    private void subscribe() {
         Log.i(GOOGLE_FIT_TAG, "Attempting to subscribe");
         Fitness.RecordingApi.subscribe(mApiClient, DataType.TYPE_STEP_COUNT_CUMULATIVE)
                 .setResultCallback(new ResultCallback<Status>() {
@@ -122,20 +139,6 @@ public class MainActivity extends AppCompatActivity implements
             } catch(IntentSender.SendIntentException e ) { }
         } else
             Log.e( GOOGLE_FIT_TAG, "authInProgress" );
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if( requestCode == REQUEST_OAUTH ) {
-            authInProgress = false;
-            if( resultCode == RESULT_OK )
-                if( !mApiClient.isConnecting() && !mApiClient.isConnected() )
-                    mApiClient.connect();
-            else if( resultCode == RESULT_CANCELED )
-                Log.e( GOOGLE_FIT_TAG, "RESULT_CANCELED" );
-        }
-        else
-            Log.e(GOOGLE_FIT_TAG, "requestCode NOT request_oauth");
     }
 
     @Override
