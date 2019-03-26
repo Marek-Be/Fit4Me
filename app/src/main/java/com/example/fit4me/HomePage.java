@@ -122,23 +122,8 @@ public class HomePage extends AppCompatActivity{
     private class GetDailyStepCount extends AsyncTask<Void, Void, Void> {
 
         protected Void doInBackground(Void... params) {
-            long total = 0;
 
-            PendingResult<DailyTotalResult> result = Fitness.HistoryApi.readDailyTotal(mApiClient, DataType.TYPE_STEP_COUNT_DELTA);
-            DailyTotalResult totalResult = result.await(30, TimeUnit.SECONDS);
-            if (totalResult.getStatus().isSuccess()) {
-                DataSet totalSet = totalResult.getTotal();
-                if(totalSet != null && !totalSet.isEmpty()){
-                    total = totalSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
-                    dailyTotal = (int) total;
-                    Log.i(GOOGLE_FIT_TAG, "Daily total-" + total);
-                }
-            }
-            else
-                Log.w(GOOGLE_FIT_TAG, "There was a problem getting the step count.");
-
-            Log.i(GOOGLE_FIT_TAG, "Total steps: " + total);
-            final int TOTAL_DAILY_STEPS = (int) total;
+            final int TOTAL_DAILY_STEPS = (int) getSteps(mApiClient);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -171,13 +156,24 @@ public class HomePage extends AppCompatActivity{
 
 
     }
-    public int getTotal(){
-        return dailyTotal;
+    public static long getSteps(GoogleApiClient mApiClient){
+        long total = 0;
+
+        PendingResult<DailyTotalResult> result = Fitness.HistoryApi.readDailyTotal(mApiClient, DataType.TYPE_STEP_COUNT_DELTA);
+        DailyTotalResult totalResult = result.await(30, TimeUnit.SECONDS);
+        if (totalResult.getStatus().isSuccess()) {
+            DataSet totalSet = totalResult.getTotal();
+            if(totalSet != null && !totalSet.isEmpty()){
+                total = totalSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
+                Log.i(GOOGLE_FIT_TAG, "Daily total-" + total);
+            }
+        }
+        else
+            Log.w(GOOGLE_FIT_TAG, "There was a problem getting the step count.");
+        Log.i(GOOGLE_FIT_TAG, "Total steps: " + total);
+        return total;
     }
 
-    public int getGoal(){
-        return goal;
-    }
 
 
 }

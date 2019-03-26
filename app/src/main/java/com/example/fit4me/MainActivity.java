@@ -71,11 +71,11 @@ public class MainActivity extends AppCompatActivity
 
         //setting up alarmManager
         AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, alarmReceiver.class);
+        Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
         Calendar time = Calendar.getInstance();
-        time.set(Calendar.HOUR_OF_DAY, 14);
-        time.set(Calendar.MINUTE, 36);
+        time.set(Calendar.HOUR_OF_DAY, 20);
+        time.set(Calendar.MINUTE, 01);
         time.set(Calendar.SECOND, 0);
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
 
