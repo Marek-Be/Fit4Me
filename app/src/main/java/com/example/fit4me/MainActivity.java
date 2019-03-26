@@ -1,5 +1,9 @@
 package com.example.fit4me;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -10,16 +14,24 @@ import android.content.IntentSender;
 import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.FitnessStatusCodes;
+import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
+import com.google.android.gms.fitness.data.Field;
+import com.google.android.gms.fitness.result.DailyTotalResult;
+
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -54,6 +66,16 @@ public class MainActivity extends AppCompatActivity implements
         logo.startAnimation(fadeIn);
         fadeIn.setDuration(1500);
         fadeIn.setFillAfter(true);
+
+        //setting up alarmManager
+        AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, alarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
+        Calendar time = Calendar.getInstance();
+        time.set(Calendar.HOUR_OF_DAY, 14);
+        time.set(Calendar.MINUTE, 36);
+        time.set(Calendar.SECOND, 0);
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
 
         mApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Fitness.RECORDING_API)
@@ -147,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    private class GetDailyStepCount extends AsyncTask<Void, Void, Void> { //not being called
+    /*private class GetDailyStepCount extends AsyncTask<Void, Void, Void> { //not being called
 
         protected Void doInBackground(Void... params) {
 
@@ -183,5 +205,5 @@ public class MainActivity extends AppCompatActivity implements
             return null;
         }
         outState.putBoolean(APP_INITIALIZED, initialized);
-    }
+    }*/
 }

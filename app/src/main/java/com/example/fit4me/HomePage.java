@@ -1,5 +1,7 @@
 package com.example.fit4me;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -21,12 +23,13 @@ import com.google.android.gms.fitness.result.DailyTotalResult;
 
 import java.util.concurrent.TimeUnit;
 
-public class HomePage extends AppCompatActivity {
+public class HomePage extends AppCompatActivity{
 
     private static final String GOOGLE_FIT_TAG = "Google Fit API";
     private GoogleApiClient mApiClient;
     private String [] extras;
     private int goal;
+    private int dailyTotal;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -77,6 +80,7 @@ public class HomePage extends AppCompatActivity {
                 DataSet totalSet = totalResult.getTotal();
                 if(totalSet != null && !totalSet.isEmpty()){
                     total = totalSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
+                    dailyTotal = (int) total;
                     Log.i(GOOGLE_FIT_TAG, "Daily total-" + total);
                 }
             }
@@ -100,6 +104,17 @@ public class HomePage extends AppCompatActivity {
             });
             return null;
         }
+
+
     }
+    public int getTotal(){
+        return dailyTotal;
+    }
+
+    public int getGoal(){
+        return goal;
+    }
+
+
 }
 
