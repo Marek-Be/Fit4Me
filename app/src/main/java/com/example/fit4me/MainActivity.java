@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity
                 .enableAutoManage(this, 0, this)
                 .build();
         mApiClient.connect();
-        
+
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run()

@@ -14,14 +14,7 @@ public class alarmReceiver extends BroadcastReceiver {
         total = goalCheck.getTotal();
         goal = goalCheck.getGoal();
 
-        if(total < goal){
-            Toast.makeText(context,"you have not reached your goal", Toast.LENGTH_LONG).show();
-        }
-        else if(total == goal){
-            Toast.makeText(context,"you reached your goal", Toast.LENGTH_LONG).show();
-        }
-        else{
-            Toast.makeText(context, "alarm went off", Toast.LENGTH_LONG).show();
-        }
+       //check if goal has been reached, if not reset all stars and add to database, if it has been reached dont update stars and add to database
+        
     }
 }
