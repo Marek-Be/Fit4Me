@@ -65,7 +65,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         while (!c.isAfterLast()) {
             if (c.getString(c.getColumnIndex(COLUMN_DATE)) != null) {
                 dbString += c.getString((c.getColumnIndex(COLUMN_DATE)));
-                dbString += c.getString((c.getColumnIndex(COLUMN_GOALREACHED)));
+                dbString += c.getString((c.getColumnIndex(COLUMN_GOAL)));
+                dbString += c.getString((c.getColumnIndex(COLUMN_DAILYSTEPS)));
                 dbString += "\n";
 
             }
