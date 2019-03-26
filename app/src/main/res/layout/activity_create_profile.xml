@@ -36,7 +36,7 @@
         android:layout_marginBottom="116dp"
         android:background="@drawable/curvedbutton"
         android:text="Continue"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,17 +73,14 @@
     <ImageView
         android:id="@+id/backgroundimage"
         android:layout_width="0dp"
-        android:layout_height="269dp"
-        android:layout_marginStart="40dp"
+        android:layout_height="309dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="166dp"
-        android:layout_marginEnd="40dp"
         android:layout_marginRight="40dp"
-        android:gravity ="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/inputbackground" />
-
 
 </android.support.constraint.ConstraintLayout>

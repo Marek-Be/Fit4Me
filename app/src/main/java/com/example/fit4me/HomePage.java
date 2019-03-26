@@ -5,6 +5,9 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -19,6 +22,8 @@ import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.result.DailyTotalResult;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class HomePage extends AppCompatActivity {
@@ -27,6 +32,10 @@ public class HomePage extends AppCompatActivity {
     private GoogleApiClient mApiClient;
     private String [] extras;
     private int goal;
+    private List<ImageButton> stars;
+    private static final int[] star_IDs = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
+    private boolean [] goalReached;
+    private int currentDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,10 +62,51 @@ public class HomePage extends AppCompatActivity {
 
         //progress bar functionality
         ProgressBar progress = findViewById(R.id.determinateBar);
-        if(dailyGoal != null && dailyGoal.length() > 0)   //check dailyGoal contains an int
+        if(dailyGoal != null && dailyGoal.length() > 0)   //star_on dailyGoal contains an int
             goal = Integer.parseInt(dailyGoal);
         progress.setMax(goal);
         updateProgressBar();
+
+        //star image buttons
+        stars = new ArrayList<ImageButton>(star_IDs.length);
+        for(int i:star_IDs)
+        {
+            ImageButton star = findViewById(i);
+            //if star images are pressed -> bring to screen displaying that day's data - at the moment just brings to empty screen
+            star.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(HomePage.this, DailyData.class);
+                    int c = 0;
+                    boolean found = false;
+                    while(!found && c < star_IDs.length)
+                    {
+                        //pass in selected dayNumber as argument to access data for that day
+                        if(star_IDs[c] == v.getId())
+                        {
+                            found = true;
+                            String dayNum = Integer.toString(c);
+                            intent.putExtra("star ID", dayNum);
+                            startActivity(intent);
+                        }
+                        else
+                        {
+                            c++;
+                        }
+                    }
+
+                }
+            });
+            stars.add(star);
+        }
+
+        //initally set all days of goal reached to false
+        goalReached = new boolean[star_IDs.length];
+        for(int i = 0; i < goalReached.length; i++)
+        {
+            goalReached[i] = false;
+        }
+        currentDay = 0;
     }
 
     private void updateProgressBar(){    //Access the API and use it to update the progress bar.
@@ -87,13 +137,27 @@ public class HomePage extends AppCompatActivity {
                 @Override
                 public void run() {
 
-                    if(TOTAL_DAILY_STEPS > goal) {        //TODO put code for when they have achieved their goal here
+                    if(TOTAL_DAILY_STEPS > goal)
+                    {        //TODO put code for when they have achieved their goal here
                         Toast.makeText(getApplicationContext(), "Congratulations. You have reached your goal.  Steps taken : " + TOTAL_DAILY_STEPS, Toast.LENGTH_SHORT).show();
+                        //change star image for the day
+                        if(currentDay < star_IDs.length)
+                        {
+                            goalReached[currentDay]=true;
+                            //**NOTE: needs testing
+                            stars.get(currentDay).setImageResource(R.drawable.star_on);
+                            currentDay++;
+                        }
+                        //else celebration animation - weekly goal reached
                     }
                     else
                         Toast.makeText(getApplicationContext(), "Steps taken : " + TOTAL_DAILY_STEPS, Toast.LENGTH_SHORT).show();
                     ProgressBar progress = findViewById(R.id.determinateBar);
                     progress.setProgress(TOTAL_DAILY_STEPS);
+                    // **NOTE: avatar movement needs testing
+                    // get avatar X coordinates moving with progress bar
+                    ImageView avatar = findViewById(R.id.avatar);
+                    avatar.setTranslationX(avatar.getX() + TOTAL_DAILY_STEPS);
                 }
             });
             return null;

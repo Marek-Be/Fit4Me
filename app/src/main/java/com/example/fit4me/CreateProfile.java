@@ -13,7 +13,6 @@ public class CreateProfile extends AppCompatActivity {
     private Button button;
     private EditText nameInput;
     private EditText goalInput;
-    private View background;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +37,5 @@ public class CreateProfile extends AppCompatActivity {
         });
 
     }
-
-
-    //way of creating user account based on goal information inputted
 
 }

@@ -64,8 +64,18 @@ public class MainActivity extends AppCompatActivity
                 .enableAutoManage(this, 0, this)
                 .build();
         mApiClient.connect();
-    }
 
+        new Handler().postDelayed(new Runnable(){
+            @Override
+            public void run()
+            {
+                Intent i = new Intent(MainActivity.this, CreateProfile.class);
+                startActivity(i);
+            }
+        }, LOAD_TIME);
+
+    }
+/*
     @Override
     protected void onStart() {
         super.onStart();
@@ -91,7 +101,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }, LOAD_TIME);
-    }
+    }*/
 
     @Override
     protected void onStop(){
