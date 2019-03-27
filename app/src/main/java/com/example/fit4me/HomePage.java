@@ -1,5 +1,6 @@
 package com.example.fit4me;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -63,7 +64,7 @@ public class HomePage extends AppCompatActivity{
         extras = getIntent().getStringArrayExtra("arguments");
         if(extras == null)
             return;
-        String userName = extras[0];
+        final String userName = extras[0];
         String dailyGoal = extras[1];
         TextView nameText = findViewById(R.id.nameText);
         nameText.setText(String.format("Go %s!", userName));    //C way of printing
@@ -80,6 +81,7 @@ public class HomePage extends AppCompatActivity{
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(HomePage.this, AddActivity.class);
+                intent.putExtra("username", userName);
                 startActivity(intent);
             }
         });
@@ -90,6 +92,7 @@ public class HomePage extends AppCompatActivity{
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(HomePage.this, DailyData.class);
+                intent.putExtra("username", userName);
                 startActivity(intent);
             }
         });
@@ -147,7 +150,8 @@ public class HomePage extends AppCompatActivity{
                         // **NOTE: avatar movement needs testing
                         // get avatar X coordinates moving with progress bar
                         ImageView avatar = findViewById(R.id.avatar);
-                        avatar.setTranslationX(avatar.getX() + TOTAL_DAILY_STEPS);
+                        ObjectAnimator animator = ObjectAnimator.ofFloat(avatar, "translationX", progress.getProgress());
+                        animator.start();
                     }
                 });
             }

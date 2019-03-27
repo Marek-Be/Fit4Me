@@ -13,6 +13,10 @@ public class DailyData extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_data);
 
+        String name = getIntent().getStringExtra("username");
+        TextView text = findViewById(R.id.progress_text);
+        text.setText(String.format("%s's Progress", name));
+
         //display data for current week in some sort of graphical way
 
     }
