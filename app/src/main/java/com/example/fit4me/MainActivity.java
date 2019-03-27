@@ -3,7 +3,6 @@ package com.example.fit4me;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -14,34 +13,28 @@ import android.content.IntentSender;
 import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.FitnessStatusCodes;
-import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
-import com.google.android.gms.fitness.data.Field;
-import com.google.android.gms.fitness.result.DailyTotalResult;
 
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    public static final String GOOGLE_FIT_TAG = "Google Fit API";
     private static final int REQUEST_OAUTH = 1;
     private static final int LOAD_TIME = 3000;
     private static final String AUTH_PENDING = "auth_state_pending";
     private static final String APP_INITIALIZED = "initialized";
-    private static final String GOOGLE_FIT_TAG = "Google Fit API";
 
     private boolean authInProgress = false;
     private GoogleApiClient mApiClient;
@@ -49,12 +42,11 @@ public class MainActivity extends AppCompatActivity
     private Handler handler = new Handler();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             initialized = savedInstanceState.getBoolean(APP_INITIALIZED);
-            if(initialized){
+            if (initialized) {
                 Intent intent = new Intent(MainActivity.this, HomePage.class);
                 startActivity(intent);
             }
@@ -74,8 +66,8 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
         Calendar time = Calendar.getInstance();
-        time.set(Calendar.HOUR_OF_DAY, 20);
-        time.set(Calendar.MINUTE, 01);
+        time.set(Calendar.HOUR_OF_DAY, 23);
+        time.set(Calendar.MINUTE, 55);
         time.set(Calendar.SECOND, 0);
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);*/
 
@@ -86,10 +78,8 @@ public class MainActivity extends AppCompatActivity
                 .enableAutoManage(this, 0, this)
                 .build();
         mApiClient.connect();
-
     }
 
-   @Override
     protected void onStart() {
         super.onStart();
         //if(initialized){      //Uncomment to prevent returning to the main menu
@@ -169,43 +159,4 @@ public class MainActivity extends AppCompatActivity
         super.onSaveInstanceState(outState);
         outState.putBoolean(AUTH_PENDING, authInProgress);
     }
-
-
-    /*private class GetDailyStepCount extends AsyncTask<Void, Void, Void> { //not being called
-
-        protected Void doInBackground(Void... params) {
-
-            long total = 0;
-            //HomePage progress = new HomePage();
-
-            PendingResult<DailyTotalResult> result = Fitness.HistoryApi.readDailyTotal(mApiClient, DataType.TYPE_STEP_COUNT_DELTA);
-            DailyTotalResult totalResult = result.await(30, TimeUnit.SECONDS);
-            if (totalResult.getStatus().isSuccess()) {
-
-                DataSet totalSet = totalResult.getTotal();
-                if(totalSet == null || totalSet.isEmpty()) {
-                    total = 0;
-                }
-                else{
-                    total = totalSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
-                    Log.i("daily total", Integer.toString((int) total));
-                    //progress.setData(total);
-                }
-
-            } else
-                Log.w(TAG, "There was a problem getting the step count.");
-
-            Log.i(TAG, "Total steps: " + total);
-            dailySteps = total;
-            final long TOTAL_DAILY_STEPS = total;
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(), "Steps taken : " + TOTAL_DAILY_STEPS, Toast.LENGTH_SHORT).show();
-                }
-            });
-            return null;
-        }
-        outState.putBoolean(APP_INITIALIZED, initialized);
-    }*/
 }
