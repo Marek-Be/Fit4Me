@@ -13,9 +13,7 @@ public class DailyData extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_data);
 
-        //find out which star was selected and display data for corresponding day
-        starID = getIntent().getStringExtra("star ID");
-        TextView starIDText = findViewById(R.id.starIDText);
-        starIDText.setText(starID);
+        //display data for current week in some sort of graphical way
+
     }
 }

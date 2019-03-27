@@ -17,7 +17,7 @@
         android:layout_marginRight="8dp"
         android:gravity="center"
         android:text="Create User Profile"
-        android:textColor="#0033ff"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="35dp"
         app:fontFamily="@font/amaranth"
         app:layout_constraintEnd_toEndOf="parent"

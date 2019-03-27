@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         fadeIn.setDuration(1500);
         fadeIn.setFillAfter(true);
 
-        //setting up alarmManager
+        /*//setting up alarmManager
         AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity
         time.set(Calendar.HOUR_OF_DAY, 20);
         time.set(Calendar.MINUTE, 01);
         time.set(Calendar.SECOND, 0);
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);*/
 
         mApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Fitness.RECORDING_API)
@@ -87,19 +87,9 @@ public class MainActivity extends AppCompatActivity
                 .build();
         mApiClient.connect();
 
-        new Handler().postDelayed(new Runnable(){
-            @Override
-            public void run()
-            {
-                Intent i = new Intent(MainActivity.this, CreateProfile.class);
-                startActivity(i);
-            }
-        }, LOAD_TIME);
-
     }
-/*
->>>>>>> e071072a4d86e11e20a7be4dc3670dcabc0df316
-    @Override
+
+   @Override
     protected void onStart() {
         super.onStart();
         //if(initialized){      //Uncomment to prevent returning to the main menu
@@ -124,7 +114,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }, LOAD_TIME);
-    }*/
+    }
 
     @Override
     protected void onStop(){

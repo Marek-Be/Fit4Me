@@ -1,4 +1,4 @@
-package com.example.fit4me;
+/*package com.example.fit4me;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -31,4 +31,4 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.i("alarm worked","alarm worked");
 
     }
-}
+}*/

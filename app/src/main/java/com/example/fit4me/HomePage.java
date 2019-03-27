@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,11 +35,11 @@ public class HomePage extends AppCompatActivity{
     private GoogleApiClient mApiClient;
     private String [] extras;
     private int goal;
-    private int dailyTotal;
-    private List<ImageButton> stars;
+    private List<ImageView> stars;
     private static final int[] star_IDs = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
     private boolean [] goalReached;
-    private int currentDay;
+    private int currentStar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -60,8 +61,6 @@ public class HomePage extends AppCompatActivity{
         String dailyGoal = extras[1];
         TextView nameText = findViewById(R.id.nameText);
         nameText.setText("Go " + userName + "!");
-        TextView goalText = findViewById(R.id.goalText);
-        goalText.setText(dailyGoal);
 
         //progress bar functionality
         ProgressBar progress = findViewById(R.id.determinateBar);
@@ -70,36 +69,31 @@ public class HomePage extends AppCompatActivity{
         progress.setMax(goal);
         updateProgressBar();
 
-        //star image buttons
-        stars = new ArrayList<ImageButton>(star_IDs.length);
+        //activity button
+        Button activityButton = findViewById(R.id.addactivity);
+        activityButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(HomePage.this, AddActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //trackprogress button
+        Button progressButton = findViewById(R.id.trackprogress);
+        progressButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(HomePage.this, DailyData.class);
+                startActivity(intent);
+            }
+        });
+
+        //initialise star image arrayList
+        stars = new ArrayList<ImageView>(star_IDs.length);
         for(int i:star_IDs)
         {
-            ImageButton star = findViewById(i);
-            //if star images are pressed -> bring to screen displaying that day's data - at the moment just brings to empty screen
-            star.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(HomePage.this, DailyData.class);
-                    int c = 0;
-                    boolean found = false;
-                    while(!found && c < star_IDs.length)
-                    {
-                        //pass in selected dayNumber as argument to access data for that day
-                        if(star_IDs[c] == v.getId())
-                        {
-                            found = true;
-                            String dayNum = Integer.toString(c);
-                            intent.putExtra("star ID", dayNum);
-                            startActivity(intent);
-                        }
-                        else
-                        {
-                            c++;
-                        }
-                    }
-
-                }
-            });
+            ImageView star = findViewById(i);
             stars.add(star);
         }
 
@@ -109,13 +103,12 @@ public class HomePage extends AppCompatActivity{
         {
             goalReached[i] = false;
         }
-        currentDay = 0;
+        currentStar = 0;
     }
 
     private void updateProgressBar(){    //Access the API and use it to update the progress bar.
         new GetDailyStepCount().execute();
     }
-
 
 
     //display data from Google Fit API
@@ -132,12 +125,12 @@ public class HomePage extends AppCompatActivity{
                     {        //TODO put code for when they have achieved their goal here
                         Toast.makeText(getApplicationContext(), "Congratulations. You have reached your goal.  Steps taken : " + TOTAL_DAILY_STEPS, Toast.LENGTH_SHORT).show();
                         //change star image for the day
-                        if(currentDay < star_IDs.length)
+                        if(currentStar < star_IDs.length)
                         {
-                            goalReached[currentDay]=true;
+                            goalReached[currentStar]=true;
                             //**NOTE: needs testing
-                            stars.get(currentDay).setImageResource(R.drawable.star_on);
-                            currentDay++;
+                            stars.get(currentStar).setImageResource(android.R.drawable.btn_star_big_on);
+                            currentStar++;
                         }
                         //else celebration animation - weekly goal reached
                     }
@@ -156,6 +149,7 @@ public class HomePage extends AppCompatActivity{
 
 
     }
+
     public static long getSteps(GoogleApiClient mApiClient){
         long total = 0;
 
@@ -175,6 +169,15 @@ public class HomePage extends AppCompatActivity{
     }
 
 
+    //resetStars function - called if daily goal is not reached by midnight
+    public void resetStars (ArrayList<ImageView> stars)
+    {
+        for(int i = 0; i < stars.size(); i++)
+        {
+            stars.get(i).setImageResource(android.R.drawable.btn_star_big_off);
+        }
+        currentStar = 0;
+    }
 
 }
 
