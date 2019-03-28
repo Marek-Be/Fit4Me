@@ -15,22 +15,52 @@
         android:textColor="@color/colorPrimary"
         android:textSize="60dp"
         app:fontFamily="@font/aclonica"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.535" />
+        app:layout_constraintBottom_toBottomOf="@+id/bottom_guideline"
+        app:layout_constraintHorizontal_bias="0.486"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:layout_constraintRight_toRightOf="@+id/right_guideline"
+        app:layout_constraintTop_toTopOf="@+id/top_guideline"
+        app:layout_constraintVertical_bias="0.663" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="115dp"
         android:layout_height="110dp"
-        android:layout_marginStart="148dp"
-        android:layout_marginLeft="148dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="136dp"
+        android:layout_marginBottom="43dp"
         app:layout_constraintBottom_toTopOf="@+id/logo"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:layout_constraintRight_toRightOf="@+id/right_guideline"
+        app:layout_constraintTop_toTopOf="@+id/top_guideline"
         app:srcCompat="@drawable/ic_action_name" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/left_guideline"
+        app:layout_constraintGuide_percent=".15"
+        android:orientation="vertical"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/right_guideline"
+        app:layout_constraintGuide_percent=".85"
+        android:orientation="vertical"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/top_guideline"
+        app:layout_constraintGuide_percent=".15"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottom_guideline"
+        app:layout_constraintGuide_percent=".85"
+        android:orientation="horizontal"/>
 
 </android.support.constraint.ConstraintLayout>
