@@ -13,7 +13,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_DATA = "fitdata";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_DATE = "date";
-    private static final String COLUMN_GOALREACHED = "goalreached";
+    private static final String COLUMN_DAILYSTEPS = "dailysteps";
 
     private static final String GOAL_TABLE = "goaldata";
     private static final String COLUMN_GOAL = "goal";
@@ -33,7 +33,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         query += "CREATE TABLE " + TABLE_DATA + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT " +
                 COLUMN_DATE + " TEXT " +
-                COLUMN_GOALREACHED+ " BOOLEAN "
+                COLUMN_DAILYSTEPS+ " INT " +
+                COLUMN_GOAL+ " INT "
                 +");";
 
         query += "CREATE TABLE " + GOAL_TABLE + "(" +
@@ -59,10 +60,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     //Adds a day and if the goal was achieved on that day to the database.
-    public void addDay(String date, boolean achievedGoal){
+    public void addDay(String date, int dailySteps, int goal){
         ContentValues values = new ContentValues();
         values.put(COLUMN_DATE, date);
-        values.put(COLUMN_GOALREACHED, achievedGoal);
+        values.put(COLUMN_DAILYSTEPS, dailySteps);
+        values.put(COLUMN_GOAL, goal);
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_DATA, null, values);
         db.close();
@@ -128,7 +130,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         while (!c.isAfterLast()) {
             if (c.getString(c.getColumnIndex(COLUMN_DATE)) != null) {
                 dbString += c.getString((c.getColumnIndex(COLUMN_DATE)));
-                dbString += c.getString((c.getColumnIndex(COLUMN_GOALREACHED)));
+                dbString += c.getString((c.getColumnIndex(COLUMN_GOAL)));
+                dbString += c.getString((c.getColumnIndex(COLUMN_DAILYSTEPS)));
                 dbString += "\n";
 
             }
