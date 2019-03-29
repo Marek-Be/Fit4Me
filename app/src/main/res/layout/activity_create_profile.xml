@@ -21,11 +21,11 @@
         android:orientation="vertical"/>
 
     <android.support.constraint.Guideline
+        android:id="@+id/top_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/top_guideline"
-        app:layout_constraintGuide_percent=".15"
-        android:orientation="horizontal"/>
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.18" />
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
         android:gravity="center"
         android:text="Create User Profile"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="35dp"
+        android:textSize="30sp"
         app:fontFamily="@font/amaranth"
         app:layout_constraintBottom_toTopOf="@+id/top_guideline"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
@@ -94,14 +94,14 @@
 
     <ImageView
         android:id="@+id/backgroundimage"
-        android:layout_width="279dp"
+        android:layout_width="263dp"
         android:layout_height="279dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="64dp"
         android:layout_marginRight="40dp"
-        app:layout_constraintBottom_toBottomOf="@+id/bottom_guideline"
-        app:layout_constraintHorizontal_bias="0.515"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
         app:layout_constraintRight_toRightOf="@+id/right_guideline"
         app:layout_constraintTop_toTopOf="@+id/top_guideline"

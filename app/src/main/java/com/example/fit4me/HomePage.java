@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static java.security.AccessController.getContext;
+
 public class HomePage extends AppCompatActivity{
 
     private static final String GOOGLE_FIT_TAG = "Google Fit API";
@@ -37,6 +40,7 @@ public class HomePage extends AppCompatActivity{
 
     private GoogleApiClient mApiClient;
     private String [] extras;
+    private boolean [] extras2;
 
     private int goal;
     private List<ImageView> stars;
@@ -61,14 +65,35 @@ public class HomePage extends AppCompatActivity{
         mApiClient.connect();
 
         //receive arguments from CreateProfile Activity
+        String source = getIntent().getStringExtra("Source");
+        System.out.println("Source is " + source);
         extras = getIntent().getStringArrayExtra("arguments");
-        if(extras == null)
-            return;
+        //if(extras == null) { return; }
         final String userName = extras[0];
         String dailyGoal = extras[1];
         TextView nameText = findViewById(R.id.nameText);
         nameText.setText(String.format("Go %s!", userName));    //C way of printing
 
+
+        //receive arguments from AddActivity activity
+        //set sticker if checked
+        if(source.equals("addactivity"))
+        {
+            ImageView footballerSticker = findViewById(R.id.footballsticker);
+            ImageView swimSticker = findViewById(R.id.swimsticker);
+            ImageView bballSticker = findViewById(R.id.bballsticker);
+            ImageView cycleSticker = findViewById(R.id.cyclesticker);
+            ImageView [] setStickers = {footballerSticker, swimSticker, bballSticker, cycleSticker};
+            extras2 = getIntent().getBooleanArrayExtra("Activities");
+            for(int i = 0; i < extras2.length; i++)
+            {
+                if(extras2[i])
+                {
+                    System.out.println("football checked");
+                    setStickers[i].setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.colorAccent));
+                }
+            }
+        }
         //progress bar functionality
         ProgressBar progress = findViewById(R.id.determinateBar);
         if(dailyGoal != null && dailyGoal.length() > 0)   //star_on dailyGoal contains an int
@@ -150,7 +175,8 @@ public class HomePage extends AppCompatActivity{
                         // **NOTE: avatar movement needs testing
                         // get avatar X coordinates moving with progress bar
                         ImageView avatar = findViewById(R.id.avatar);
-                        ObjectAnimator animator = ObjectAnimator.ofFloat(avatar, "translationX", progress.getProgress());
+                        ObjectAnimator animator = ObjectAnimator.ofFloat(avatar, "translationX", 350f);
+                        animator.setDuration(5000);
                         animator.start();
                     }
                 });

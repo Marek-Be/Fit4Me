@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="fit4me"
         android:textColor="@color/colorPrimary"
-        android:textSize="60dp"
+        android:textSize="50dp"
         app:fontFamily="@font/aclonica"
         app:layout_constraintBottom_toBottomOf="@+id/bottom_guideline"
         app:layout_constraintHorizontal_bias="0.486"
@@ -24,8 +24,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="115dp"
-        android:layout_height="110dp"
+        android:layout_width="97dp"
+        android:layout_height="92dp"
         android:layout_marginTop="136dp"
         android:layout_marginBottom="43dp"
         app:layout_constraintBottom_toTopOf="@+id/logo"
