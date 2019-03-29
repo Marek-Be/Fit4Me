@@ -1,5 +1,6 @@
 package com.example.fit4me;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,16 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddActivity extends AppCompatActivity {
-
+    Context context;
     //TODO way of remembering what checkboxes were already checked
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        DatabaseHandler database = new DatabaseHandler(this,null,null,1);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
         String name = getIntent().getStringExtra("username");
         TextView text = findViewById(R.id.activity_text);
         text.setText(String.format("%s's Activities Today", name));
+
+
     }
 }

@@ -27,6 +27,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     //Creates new database
+    //getgoal function needs to return a goal related to a specific date
+    //add star method instead of setStar
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query = "";
