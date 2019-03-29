@@ -4,117 +4,155 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     tools:context=".AddActivity">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/left_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.11" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/right_guideline"
+        app:layout_constraintGuide_percent=".85"
+        android:orientation="vertical"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/top_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.13" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/bottom_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9" />
 
     <TextView
         android:id="@+id/activity_text"
-        android:layout_width="267dp"
-        android:layout_height="96dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_width="277dp"
+        android:layout_height="126dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:textColor="@color/colorAccent"
         android:textSize="34sp"
         app:fontFamily="@font/amaranth"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.115" />
+        app:layout_constraintBottom_toBottomOf="@+id/top_guideline"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:layout_constraintRight_toRightOf="@+id/right_guideline"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
         android:id="@+id/football"
         android:layout_width="172dp"
-        android:layout_height="61dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_height="69dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="44dp"
         android:button="@null"
         android:checked="false"
         android:clickable="true"
         android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
         android:text="Football"
+        android:textColor="@color/colorPrimary"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:typeface="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.757"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.371" />
+        app:layout_constraintBottom_toTopOf="@+id/swimming"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toRightOf="@+id/footballerImage"
+        app:layout_constraintRight_toRightOf="@+id/right_guideline"
+        app:layout_constraintTop_toTopOf="@+id/top_guideline"
+        app:layout_constraintVertical_bias="0.89" />
 
     <CheckBox
         android:id="@+id/swimming"
         android:layout_width="172dp"
         android:layout_height="69dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="48dp"
         android:button="@null"
         android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
         android:text="Swimming"
+        android:textColor="@color/colorPrimary"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.757"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.47" />
+        app:layout_constraintBottom_toTopOf="@+id/basketball"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toRightOf="@+id/swimmerImage"
+        app:layout_constraintRight_toRightOf="@+id/right_guideline" />" />
 
     <CheckBox
         android:id="@+id/basketball"
         android:layout_width="172dp"
         android:layout_height="69dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="40dp"
         android:button="@null"
         android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
         android:text="Basketball"
+        android:textColor="@color/colorPrimary"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.757"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.577" />
+        app:layout_constraintBottom_toTopOf="@+id/cycling"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toRightOf="@+id/bballplayerImage"
+        app:layout_constraintRight_toRightOf="@+id/right_guideline" />
 
     <CheckBox
         android:id="@+id/cycling"
         android:layout_width="172dp"
         android:layout_height="69dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="52dp"
         android:button="@null"
         android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
         android:text="Cycling"
+        android:textColor="@color/colorPrimary"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.757"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.684" />
+        app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toRightOf="@+id/cyclistImage"
+        app:layout_constraintRight_toRightOf="@+id/right_guideline" />
+
+    <ImageView
+        android:id="@+id/footballerImage"
+        android:layout_width="92dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toTopOf="@+id/swimmerImage"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/top_guideline"
+        app:layout_constraintVertical_bias="0.75"
+        app:srcCompat="@drawable/footballer" />
+
+    <ImageView
+        android:id="@+id/swimmerImage"
+        android:layout_width="114dp"
+        android:layout_height="93dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/bballplayerImage"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:srcCompat="@drawable/swimmer" />
+
+    <ImageView
+        android:id="@+id/bballplayerImage"
+        android:layout_width="92dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/cyclistImage"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:srcCompat="@drawable/basketballplayer" />
+
+
+    <ImageView
+        android:id="@+id/cyclistImage"
+        android:layout_width="79dp"
+        android:layout_height="71dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bottom_guideline"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:srcCompat="@drawable/cyclist" />
 
 </android.support.constraint.ConstraintLayout>

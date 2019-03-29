@@ -150,7 +150,8 @@ public class HomePage extends AppCompatActivity{
                         // **NOTE: avatar movement needs testing
                         // get avatar X coordinates moving with progress bar
                         ImageView avatar = findViewById(R.id.avatar);
-                        ObjectAnimator animator = ObjectAnimator.ofFloat(avatar, "translationX", progress.getProgress());
+                        ObjectAnimator animator = ObjectAnimator.ofFloat(avatar, "translationX", 100f);
+                        animator.setDuration(2000);
                         animator.start();
                     }
                 });

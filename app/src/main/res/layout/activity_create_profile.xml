@@ -101,7 +101,7 @@
         android:layout_marginTop="84dp"
         android:layout_marginRight="40dp"
         app:layout_constraintBottom_toBottomOf="@+id/bottom_guideline"
-        app:layout_constraintHorizontal_bias="0.515"
+        app:layout_constraintHorizontal_bias="0.563"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
         app:layout_constraintRight_toRightOf="@+id/right_guideline"
         app:layout_constraintTop_toTopOf="@+id/top_guideline"
