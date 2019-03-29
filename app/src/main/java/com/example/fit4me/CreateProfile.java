@@ -31,6 +31,7 @@ public class CreateProfile extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(CreateProfile.this, HomePage.class);
                 String [] arguments = {nameInput.getText().toString(), goalInput.getText().toString()};
+                intent.putExtra("Source", "createprofile");
                 intent.putExtra("arguments", arguments);
                 startActivity(intent);
             }

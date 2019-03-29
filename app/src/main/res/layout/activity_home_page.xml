@@ -8,25 +8,25 @@
     tools:context=".HomePage">
 
     <android.support.constraint.Guideline
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/left_guideline"
-        app:layout_constraintGuide_percent=".15"
-        android:orientation="vertical"/>
-
-    <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".15" />
+
+    <android.support.constraint.Guideline
         android:id="@+id/right_guideline"
-        app:layout_constraintGuide_percent=".85"
-        android:orientation="vertical"/>
-
-    <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".85" />
+
+    <android.support.constraint.Guideline
         android:id="@+id/top_guideline"
-        app:layout_constraintGuide_percent=".15"
-        android:orientation="horizontal"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".15" />
 
     <android.support.constraint.Guideline
         android:id="@+id/bottom_guideline"
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:textColor="@color/colorAccent"
-        android:textSize="30sp"
+        android:textSize="28sp"
         app:fontFamily="@font/amaranth"
         app:layout_constraintBottom_toBottomOf="@+id/bottom_guideline"
         app:layout_constraintHorizontal_bias="0.0"
@@ -88,7 +88,7 @@
         android:layout_marginTop="472dp"
         android:background="@drawable/curvedbutton2"
         android:text="ADD ACTIVITY"
-        android:textColor="#ffffff"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/bottom_guideline2"
         app:layout_constraintLeft_toRightOf="@+id/left_guideline"
@@ -102,7 +102,7 @@
         android:layout_marginTop="472dp"
         android:background="@drawable/curvedbutton2"
         android:text="TRACK PROGRESS"
-        android:textColor="#ffffff"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/bottom_guideline2"
         app:layout_constraintRight_toLeftOf="@+id/right_guideline"
@@ -182,5 +182,58 @@
         app:layout_constraintTop_toTopOf="@+id/top_guideline"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/homebackground" />
+
+    <ImageView
+        android:id="@+id/footballsticker"
+        android:layout_width="60dp"
+        android:layout_height="62dp"
+        android:layout_marginBottom="52dp"
+        android:tint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/bottom_guideline"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:srcCompat="@drawable/footballer" />
+
+    <ImageView
+        android:id="@+id/swimsticker"
+        android:layout_width="60dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginEnd="71dp"
+        android:layout_marginRight="71dp"
+        android:tint="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/bg"
+        app:layout_constraintEnd_toEndOf="@+id/bballsticker"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/footballsticker"
+        app:layout_constraintTop_toTopOf="@+id/footballsticker"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/swimmer" />
+
+    <ImageView
+        android:id="@+id/bballsticker"
+        android:layout_width="60dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="61dp"
+        android:layout_marginRight="61dp"
+        android:tint="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/bg"
+        app:layout_constraintEnd_toEndOf="@+id/trackprogress"
+        app:layout_constraintTop_toTopOf="@+id/swimsticker"
+        app:srcCompat="@drawable/basketballplayer" />
+
+    <ImageView
+        android:id="@+id/cyclesticker"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginRight="1dp"
+        android:tint="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/bg"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toEndOf="@+id/bballsticker"
+        app:layout_constraintTop_toTopOf="@+id/bballsticker"
+        app:srcCompat="@drawable/cyclist" />
+
 
 </android.support.constraint.ConstraintLayout>
