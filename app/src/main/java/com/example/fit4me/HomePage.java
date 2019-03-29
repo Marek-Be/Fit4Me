@@ -37,10 +37,11 @@ public class HomePage extends AppCompatActivity{
     private static final String GOOGLE_FIT_TAG = "Google Fit API";
     private static final int[] star_IDs = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
     private static final int STEP_UPDATE_TIME = 20000;  //Every 20 seconds update progress bar.
+    public static final int GET_ACTIVITIES = 1;
 
     private GoogleApiClient mApiClient;
     private String [] extras;
-    private boolean [] extras2;
+    private boolean [] activities;
 
     private int goal;
     private List<ImageView> stars;
@@ -65,8 +66,6 @@ public class HomePage extends AppCompatActivity{
         mApiClient.connect();
 
         //receive arguments from CreateProfile Activity
-        String source = getIntent().getStringExtra("Source");
-        System.out.println("Source is " + source);
         extras = getIntent().getStringArrayExtra("arguments");
         //if(extras == null) { return; }
         final String userName = extras[0];
@@ -74,26 +73,6 @@ public class HomePage extends AppCompatActivity{
         TextView nameText = findViewById(R.id.nameText);
         nameText.setText(String.format("Go %s!", userName));    //C way of printing
 
-
-        //receive arguments from AddActivity activity
-        //set sticker if checked
-        if(source.equals("addactivity"))
-        {
-            ImageView footballerSticker = findViewById(R.id.footballsticker);
-            ImageView swimSticker = findViewById(R.id.swimsticker);
-            ImageView bballSticker = findViewById(R.id.bballsticker);
-            ImageView cycleSticker = findViewById(R.id.cyclesticker);
-            ImageView [] setStickers = {footballerSticker, swimSticker, bballSticker, cycleSticker};
-            extras2 = getIntent().getBooleanArrayExtra("Activities");
-            for(int i = 0; i < extras2.length; i++)
-            {
-                if(extras2[i])
-                {
-                    System.out.println("football checked");
-                    setStickers[i].setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.colorAccent));
-                }
-            }
-        }
         //progress bar functionality
         ProgressBar progress = findViewById(R.id.determinateBar);
         if(dailyGoal != null && dailyGoal.length() > 0)   //star_on dailyGoal contains an int
@@ -107,7 +86,7 @@ public class HomePage extends AppCompatActivity{
             public void onClick(View v){
                 Intent intent = new Intent(HomePage.this, AddActivity.class);
                 intent.putExtra("username", userName);
-                startActivity(intent);
+                startActivityForResult(intent, GET_ACTIVITIES);
             }
         });
 
@@ -124,8 +103,7 @@ public class HomePage extends AppCompatActivity{
 
         //initialise star image arrayList
         stars = new ArrayList<ImageView>(star_IDs.length);
-        for(int i:star_IDs)
-        {
+        for(int i:star_IDs) {
             ImageView star = findViewById(i);
             stars.add(star);
             thread = new HandlerThread("MyHandlerThread");
@@ -136,9 +114,7 @@ public class HomePage extends AppCompatActivity{
         //initially set all days of goal reached to false
         goalReached = new boolean[star_IDs.length];
         for(int i = 0; i < goalReached.length; i++)
-        {
             goalReached[i] = false;
-        }
         currentStar = 0;
     }
 
@@ -207,6 +183,25 @@ public class HomePage extends AppCompatActivity{
         return (int) total;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i("Activities", "Successfully called functions");
+        if (resultCode == RESULT_OK && requestCode == GET_ACTIVITIES) {
+            Log.i("Activities", "Well that is something");
+            ImageView footballerSticker = findViewById(R.id.footballsticker);
+            ImageView swimSticker = findViewById(R.id.swimsticker);
+            ImageView ballSticker = findViewById(R.id.bballsticker);
+            ImageView cycleSticker = findViewById(R.id.cyclesticker);
+            ImageView [] setStickers = {footballerSticker, swimSticker, ballSticker, cycleSticker};
+            boolean[] activities = data.getBooleanArrayExtra("Activities");
+            for(int i = 0; i < activities.length; i++) {
+                if(activities[i]) {
+                    Log.i("Activities", "Activity marked " + i);
+                    setStickers[i].setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.colorAccent));
+                }
+            }
+        }
+    }
 
     //resetStars function - called if daily goal is not reached by midnight
     public void resetStars (ArrayList<ImageView> stars)
@@ -219,4 +214,3 @@ public class HomePage extends AppCompatActivity{
     }
 
 }
-

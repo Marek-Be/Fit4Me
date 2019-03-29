@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity
         fadeIn.setDuration(1500);
         fadeIn.setFillAfter(true);
 
-        /*//setting up alarmManager
+        //setting up alarmManager
         AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         time.set(Calendar.HOUR_OF_DAY, 23);
         time.set(Calendar.MINUTE, 55);
         time.set(Calendar.SECOND, 0);
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);*/
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
 
         mApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Fitness.RECORDING_API)
