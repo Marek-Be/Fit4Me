@@ -20,7 +20,8 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import java.util.ArrayList;
 
 public class DailyData extends AppCompatActivity {
-
+    //bar chart where each bar represents the amount of steps taken in that day
+    //x axis is steps taken
     private String starID;
     DatabaseHandler db;
 
@@ -97,11 +98,11 @@ public class DailyData extends AppCompatActivity {
         //y values will be the date
         BarEntry v1e2 = new BarEntry(1, 20f);
         valueSet1.add(v1e2);
-        BarEntry v1e3 = new BarEntry(2, 40f);
+        BarEntry v1e3 = new BarEntry(2, 80f);
         valueSet1.add(v1e3);
         BarEntry v1e4 = new BarEntry(3, 60f);
         valueSet1.add(v1e4);
-        BarEntry v1e5 = new BarEntry(4, 80f);
+        BarEntry v1e5 = new BarEntry(4, 40f);
         valueSet1.add(v1e5);
         BarEntry v1e6 = new BarEntry(5, 100f);
         valueSet1.add(v1e6);
