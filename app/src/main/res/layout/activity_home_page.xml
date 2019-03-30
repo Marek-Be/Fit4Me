@@ -65,9 +65,11 @@
         android:progressBackgroundTint="#2201A903"
         android:progressTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="@+id/bottom_guideline"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
         app:layout_constraintRight_toRightOf="@+id/right_guideline"
-        app:layout_constraintTop_toTopOf="@+id/top_guideline" />
+        app:layout_constraintTop_toTopOf="@+id/top_guideline"
+        app:layout_constraintVertical_bias="0.476" />
 
     <ImageView
         android:id="@+id/avatar"
@@ -187,52 +189,48 @@
         android:id="@+id/footballsticker"
         android:layout_width="60dp"
         android:layout_height="62dp"
-        android:layout_marginBottom="52dp"
         android:tint="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="@+id/bottom_guideline"
+        app:layout_constraintBottom_toTopOf="@+id/bg"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/determinateBar"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/footballer" />
 
     <ImageView
         android:id="@+id/swimsticker"
-        android:layout_width="60dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginEnd="71dp"
-        android:layout_marginRight="71dp"
+        android:layout_width="63dp"
+        android:layout_height="60dp"
         android:tint="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/bg"
-        app:layout_constraintEnd_toEndOf="@+id/bballsticker"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/footballsticker"
-        app:layout_constraintTop_toTopOf="@+id/footballsticker"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/swimmer" />
+        app:layout_constraintLeft_toRightOf="@+id/footballsticker"
+        app:layout_constraintTop_toBottomOf="@+id/determinateBar"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/swimmer2" />
 
     <ImageView
         android:id="@+id/bballsticker"
-        android:layout_width="60dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="61dp"
-        android:layout_marginRight="61dp"
+        android:layout_width="64dp"
+        android:layout_height="62dp"
+        android:layout_marginLeft="4dp"
         android:tint="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/bg"
-        app:layout_constraintEnd_toEndOf="@+id/trackprogress"
-        app:layout_constraintTop_toTopOf="@+id/swimsticker"
+        app:layout_constraintLeft_toRightOf="@+id/swimsticker"
+        app:layout_constraintTop_toBottomOf="@+id/determinateBar"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/basketballplayer" />
 
     <ImageView
         android:id="@+id/cyclesticker"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginRight="1dp"
+        android:layout_width="59dp"
+        android:layout_height="56dp"
+        android:layout_marginLeft="24dp"
         android:tint="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/bg"
-        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
-        app:layout_constraintStart_toEndOf="@+id/bballsticker"
-        app:layout_constraintTop_toTopOf="@+id/bballsticker"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toRightOf="@+id/bballsticker"
+        app:layout_constraintRight_toRightOf="@+id/right_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/determinateBar"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/cyclist" />
 
 
