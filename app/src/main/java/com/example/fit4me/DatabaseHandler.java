@@ -15,9 +15,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_DATE = "date";
     private static final String COLUMN_DAILYSTEPS = "dailysteps";
+    private static final String COLUMN_GOAL = "goal";
 
     private static final String GOAL_TABLE = "goaldata";
-    private static final String COLUMN_GOAL = "goal";
+    private static final String COLUMN_DAILYGOAL = "dailygoal";
 
     private static final String STAR_TABLE = "goaldata";
     private static final String COLUMN_STARCOUNT = "stars";
@@ -46,7 +47,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         query2 += "CREATE TABLE " + GOAL_TABLE + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT " +
-                COLUMN_GOAL + " INT "
+                COLUMN_DAILYGOAL + " INT "
                 +");";
 
         query3 += "CREATE TABLE " + STAR_TABLE + "(" +
@@ -88,7 +89,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public void setGoal(int goal) {
         ContentValues values = new ContentValues();
-        values.put(COLUMN_GOAL, goal);
+        values.put(COLUMN_DAILYGOAL, goal);
         SQLiteDatabase db = getWritableDatabase();
         db.update(TABLE_DATA, values, "id=1", null);
         db.close();
@@ -114,9 +115,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
 
-        dbString += c.getString((c.getColumnIndex(COLUMN_USERNAME)));
-        dbString += "\n";
-
+		if (c.getString(c.getColumnIndex(COLUMN_USERNAME)) != null) {
+			dbString += c.getString((c.getColumnIndex(COLUMN_USERNAME)));
+			dbString += "\n";
+		}
         return dbString;
     }
 	
@@ -141,8 +143,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
 
-        dbString += c.getString((c.getColumnIndex(COLUMN_STARCOUNT)));
-        dbString += "\n";
+		
+		if (c.getString(c.getColumnIndex(COLUMN_STARCOUNT)) != null) {
+			dbString += c.getString((c.getColumnIndex(COLUMN_STARCOUNT)));
+			dbString += "\n";
+		}
 
         return dbString;
     }
@@ -155,9 +160,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
-
-        dbString += c.getString((c.getColumnIndex(COLUMN_GOAL)));
-        dbString += "\n";
+		
+		if (c.getString(c.getColumnIndex(COLUMN_DAILYGOAL)) != null) {
+			dbString += c.getString((c.getColumnIndex(COLUMN_DAILYGOAL)));
+			dbString += "\n";
+		}
 
         return dbString;
     }
