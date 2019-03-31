@@ -1,3 +1,4 @@
+    
 package com.example.fit4me;
 
 import android.content.ContentValues;
@@ -20,6 +21,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String STAR_TABLE = "goaldata";
     private static final String COLUMN_STARCOUNT = "stars";
+	
+	private static final String USER_TABLE = "usernamedata";
+    private static final String COLUMN_USERNAME = "user";
 
 
     public DatabaseHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -27,29 +31,38 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     //Creates new database
-    //getgoal function needs to return a goal related to a specific date
-    //add star method instead of setStar
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = "";
-        query += "CREATE TABLE " + TABLE_DATA + "(" +
+        String query1 = "";
+        String query2 = "";
+        String query3 = "";
+        String query4 = "";
+        query1 += "CREATE TABLE " + TABLE_DATA + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT " +
                 COLUMN_DATE + " TEXT " +
                 COLUMN_DAILYSTEPS+ " INT " +
                 COLUMN_GOAL+ " INT "
                 +");";
 
-        query += "CREATE TABLE " + GOAL_TABLE + "(" +
+        query2 += "CREATE TABLE " + GOAL_TABLE + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT " +
                 COLUMN_GOAL + " INT "
                 +");";
 
-        query += "CREATE TABLE " + STAR_TABLE + "(" +
+        query3 += "CREATE TABLE " + STAR_TABLE + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT " +
                 COLUMN_STARCOUNT + " INT "
                 +");";
+				
+		query4 += "CREATE TABLE " + USER_TABLE + "(" +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT " +
+                COLUMN_USERNAME + " TEXT "
+                +");";
 
-        db.execSQL(query);
+        db.execSQL(query1);
+        db.execSQL(query2);
+        db.execSQL(query3);
+        db.execSQL(query4);
     }
 
     //Makes new database after new version is made.
@@ -58,6 +71,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DATA);
         db.execSQL("DROP TABLE IF EXISTS " + STAR_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + GOAL_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE);
         onCreate(db);
     }
 
@@ -92,6 +106,33 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
     //You need to convert this to an int
+    public String getUser() {
+        String dbString = "";
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + USER_TABLE + " WHERE 1";
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        dbString += c.getString((c.getColumnIndex(COLUMN_USERNAME)));
+        dbString += "\n";
+
+        return dbString;
+    }
+	
+	
+	public void setUser(String username) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USERNAME, username);
+        SQLiteDatabase db = getWritableDatabase();
+        db.update(TABLE_DATA, values, "id=1", null);
+        db.close();
+    }
+
+
+
+
+    //You need to convert this to an int
     public String getStars() {
         String dbString = "";
         SQLiteDatabase db = getWritableDatabase();
@@ -105,6 +146,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         return dbString;
     }
+	
 
     public String getGoal() {
         String dbString = "";
