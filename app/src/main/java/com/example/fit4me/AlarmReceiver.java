@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -14,15 +13,12 @@ import com.google.android.gms.fitness.Fitness;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class AlarmReceiver extends BroadcastReceiver {
     private GoogleApiClient mApiClient;
-    private static final int[] star_IDs = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
-    Context context;
+    private Context context;
+
     @Override
     public void onReceive(Context context, Intent intent){
         this.context = context;
@@ -32,8 +28,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .build();
         mApiClient.connect();
         new GetDailyStepCount().execute();
-
-
     }
 
     private class GetDailyStepCount extends AsyncTask<Void, Void, Void> {
@@ -47,8 +41,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
             DatabaseHandler database = new DatabaseHandler(context,null,null,1);
             int todaysSteps = HomePage.getSteps(mApiClient);
-            //Log.i(MainActivity.GOOGLE_FIT_TAG,"Steps walked today: " + todaysSteps);
-            int goal = Integer.parseInt(database.getGoal());
+            Log.i(MainActivity.GOOGLE_FIT_TAG,"Steps walked today: " + todaysSteps);
+            int goal = 8000;    //TODO read steps in from database.
 
             if(todaysSteps >= goal){
                 //DatabaseHandler database = new DatabaseHandler(parameters);
@@ -56,16 +50,11 @@ public class AlarmReceiver extends BroadcastReceiver {
                 //database.addStar();
             }
             else{
-                //resetStars();
+                //TODO reset stars in database to 0
                 database.addDay(todaysDate,todaysSteps,goal);
             }
             return null;
         }
     }
 
-    /*public void resetStars(){
-        HomePage homePage = new HomePage();
-        ArrayList<ImageView> stars = new ArrayList<ImageView>(star_IDs.length);
-        homePage.resetStars(stars);
-    }*/
 }

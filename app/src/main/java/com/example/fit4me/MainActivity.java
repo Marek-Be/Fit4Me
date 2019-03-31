@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity
         fadeIn.setFillAfter(true);
 
         //setting up alarmManager
-        AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE); //TODO fix bug where alarmManager is getting called when the app is created
         Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
         Calendar time = Calendar.getInstance();

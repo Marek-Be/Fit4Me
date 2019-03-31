@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ProgressBar;
@@ -30,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static java.security.AccessController.getContext;
 
 public class HomePage extends AppCompatActivity{
 
@@ -48,7 +46,7 @@ public class HomePage extends AppCompatActivity{
     private boolean [] goalReached;
     private int currentStar;
 
-    HandlerThread thread;
+    private HandlerThread thread;
     private Handler stepsUpdateHandler;
 
 
@@ -106,10 +104,11 @@ public class HomePage extends AppCompatActivity{
         for(int i:star_IDs) {
             ImageView star = findViewById(i);
             stars.add(star);
-            thread = new HandlerThread("MyHandlerThread");
-            thread.start();
-            stepsUpdateHandler = new Handler(thread.getLooper());
         }
+
+        thread = new HandlerThread("MyHandlerThread");
+        thread.start();
+        stepsUpdateHandler = new Handler(thread.getLooper());
 
         //initially set all days of goal reached to false
         goalReached = new boolean[star_IDs.length];
@@ -158,6 +157,8 @@ public class HomePage extends AppCompatActivity{
                 });
             }
         }, 100);
+        //DatabaseHandler database = new DatabaseHandler(this,null,null,1);
+        //database.getGoal();
     }
 
     @Override
@@ -201,16 +202,6 @@ public class HomePage extends AppCompatActivity{
                 }
             }
         }
-    }
-
-    //resetStars function - called if daily goal is not reached by midnight
-    public void resetStars (ArrayList<ImageView> stars)
-    {
-        for(int i = 0; i < stars.size(); i++)
-        {
-            stars.get(i).setImageResource(android.R.drawable.btn_star_big_off);
-        }
-        currentStar = 0;
     }
 
 }
