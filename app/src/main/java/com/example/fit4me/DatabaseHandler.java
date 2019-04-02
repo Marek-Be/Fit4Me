@@ -6,74 +6,70 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "fitdata.db";
 
-    private static final String TABLE_DATA = "fitdata";
+    private static final String DATA_TABLE = "fitdata";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_DATE = "date";
     private static final String COLUMN_DAILYSTEPS = "dailysteps";
     private static final String COLUMN_GOAL = "goal";
-
-    private static final String GOAL_TABLE = "goaldata";
-    private static final String COLUMN_DAILYGOAL = "dailygoal";
-
-    private static final String STAR_TABLE = "goaldata";
-    private static final String COLUMN_STARCOUNT = "stars";
 	
 	private static final String USER_TABLE = "usernamedata";
     private static final String COLUMN_USERNAME = "user";
+    private static final String COLUMN_DAILYGOAL = "dailygoal";
+    private static final String COLUMN_STARCOUNT = "stars";
 
 
-    public DatabaseHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public DatabaseHandler(Context context, SQLiteDatabase.CursorFactory factory) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
     }
 
     //Creates new database
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query1 = "";
-        String query2 = "";
-        String query3 = "";
-        String query4 = "";
-        query1 += "CREATE TABLE " + TABLE_DATA + "(" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT " +
-                COLUMN_DATE + " TEXT " +
-                COLUMN_DAILYSTEPS+ " INT " +
+        Log.i("Database ", "Creating Database.");
+        String queryData = "";
+        String queryUser = "";
+        queryData += "CREATE TABLE " + DATA_TABLE + "(" +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_DATE + " TEXT, " +
+                COLUMN_DAILYSTEPS+ " INT, " +
                 COLUMN_GOAL+ " INT "
                 +");";
 
-        query2 += "CREATE TABLE " + GOAL_TABLE + "(" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT " +
-                COLUMN_DAILYGOAL + " INT "
-                +");";
-
-        query3 += "CREATE TABLE " + STAR_TABLE + "(" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT " +
+        queryUser += "CREATE TABLE " + USER_TABLE + "(" +
+                COLUMN_ID + " INTEGER PRIMARY KEY, " +
+                COLUMN_USERNAME + " TEXT, " +
+                COLUMN_DAILYGOAL + " INT, " +
                 COLUMN_STARCOUNT + " INT "
                 +");";
-				
-		query4 += "CREATE TABLE " + USER_TABLE + "(" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT " +
-                COLUMN_USERNAME + " TEXT "
-                +");";
 
-        db.execSQL(query1);
-        db.execSQL(query2);
-        db.execSQL(query3);
-        db.execSQL(query4);
+        db.execSQL(queryData);
+        db.execSQL(queryUser);
     }
 
     //Makes new database after new version is made.
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DATA);
-        db.execSQL("DROP TABLE IF EXISTS " + STAR_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + GOAL_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DATA_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE);
         onCreate(db);
+    }
+
+    public void createAccount(int goal, String username){       //TODO retrieve star count and then save it.
+        SQLiteDatabase db =this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        db.delete(USER_TABLE, "id = 1", null);      //Can only have one account at a time, so delete the old one.
+
+        contentValues.put(COLUMN_ID, 1);
+        contentValues.put(COLUMN_USERNAME, username);
+        contentValues.put(COLUMN_DAILYGOAL, goal);
+        contentValues.put(COLUMN_STARCOUNT, 0);
+        db.insert(USER_TABLE, null, contentValues);
     }
 
     //Adds a day and if the goal was achieved on that day to the database.
@@ -83,7 +79,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(COLUMN_DAILYSTEPS, dailySteps);
         values.put(COLUMN_GOAL, goal);
         SQLiteDatabase db = getWritableDatabase();
-        db.insert(TABLE_DATA, null, values);
+        db.insert(DATA_TABLE, null, values);
         db.close();
     }
 
@@ -91,7 +87,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_DAILYGOAL, goal);
         SQLiteDatabase db = getWritableDatabase();
-        db.update(TABLE_DATA, values, "id=1", null);
+        db.update(USER_TABLE, values, "id=1", null);
         db.close();
     }
 
@@ -99,12 +95,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_STARCOUNT, stars);
         SQLiteDatabase db = getWritableDatabase();
-        db.update(TABLE_DATA, values, "id=1", null);
+        db.update(USER_TABLE, values, "id=1", null);
         db.close();
     }
 
-
-
+    public void setUser(String username) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USERNAME, username);
+        SQLiteDatabase db = getWritableDatabase();
+        db.update(DATA_TABLE, values, "id=1", null);
+        db.close();
+    }
 
     //You need to convert this to an int
     public String getUser() {
@@ -121,34 +122,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		}
         return dbString;
     }
-	
-	
-	public void setUser(String username) {
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_USERNAME, username);
-        SQLiteDatabase db = getWritableDatabase();
-        db.update(TABLE_DATA, values, "id=1", null);
-        db.close();
-    }
-
-
-
 
     //You need to convert this to an int
     public String getStars() {
         String dbString = "";
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + STAR_TABLE + " WHERE 1";
+        String query = "SELECT * FROM " + USER_TABLE;
 
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
-
 		
 		if (c.getString(c.getColumnIndex(COLUMN_STARCOUNT)) != null) {
 			dbString += c.getString((c.getColumnIndex(COLUMN_STARCOUNT)));
 			dbString += "\n";
 		}
-
         return dbString;
     }
 	
@@ -156,7 +143,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public String getGoal() {
         String dbString = "";
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + GOAL_TABLE + " WHERE 1";
+        String query = "SELECT * FROM " + USER_TABLE;
 
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
@@ -165,7 +152,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			dbString += c.getString((c.getColumnIndex(COLUMN_DAILYGOAL)));
 			dbString += "\n";
 		}
-
+        c.close();
         return dbString;
     }
 
@@ -173,7 +160,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public String daysToString() {
         String dbString = "";
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_DATA + " WHERE 1";
+        String query = "SELECT * FROM " + DATA_TABLE + " WHERE 1";
 
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();

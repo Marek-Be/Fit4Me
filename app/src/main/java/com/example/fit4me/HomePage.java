@@ -157,8 +157,6 @@ public class HomePage extends AppCompatActivity{
                 });
             }
         }, 100);
-        //DatabaseHandler database = new DatabaseHandler(this,null,null,1);
-        //database.getGoal();
     }
 
     @Override

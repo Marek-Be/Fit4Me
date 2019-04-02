@@ -39,7 +39,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             String todaysDate = dateFormat.format(date);
             todaysDate = todaysDate.substring(0,10);
 
-            DatabaseHandler database = new DatabaseHandler(context,null,null,1);
+            DatabaseHandler database = new DatabaseHandler(context,null);
             int todaysSteps = HomePage.getSteps(mApiClient);
             Log.i(MainActivity.GOOGLE_FIT_TAG,"Steps walked today: " + todaysSteps);
             int goal = 8000;    //TODO read steps in from database.
