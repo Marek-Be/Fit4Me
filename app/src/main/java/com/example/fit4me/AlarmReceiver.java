@@ -31,8 +31,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     private class GetDailyStepCount extends AsyncTask<Void, Void, Void> {
-        //TODO check if goal has been reached, if not reset all stars and add to database,
-        // if it has been reached make sure to give them the star and add to database
+
         protected Void doInBackground(Void... params) {
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             Date date = new Date();
@@ -42,17 +41,16 @@ public class AlarmReceiver extends BroadcastReceiver {
             DatabaseHandler database = new DatabaseHandler(context,null);
             int todaysSteps = HomePage.getSteps(mApiClient);
             Log.i(MainActivity.GOOGLE_FIT_TAG,"Steps walked today: " + todaysSteps);
-            int goal = 8000;    //TODO read steps in from database.
 
+            int goal = database.getGoal();
+            database.addDay(todaysDate,todaysSteps,goal);
             if(todaysSteps >= goal){
-                //DatabaseHandler database = new DatabaseHandler(parameters);
-                database.addDay(todaysDate,todaysSteps,goal);
-                //database.addStar();
+                int star = database.getStars();
+                if(star < 5)
+                    database.setStars(star+1);
             }
-            else{
-                //TODO reset stars in database to 0
-                database.addDay(todaysDate,todaysSteps,goal);
-            }
+            else
+                database.setStars(0);
             return null;
         }
     }

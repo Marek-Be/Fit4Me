@@ -65,16 +65,14 @@ public class HomePage extends AppCompatActivity{
 
         //receive arguments from CreateProfile Activity
         extras = getIntent().getStringArrayExtra("arguments");
-        //if(extras == null) { return; }
-        final String userName = extras[0];
-        String dailyGoal = extras[1];
+        DatabaseHandler database = new DatabaseHandler(this, null);
+        final String userName = database.getUser();
+        goal = database.getGoal();
         TextView nameText = findViewById(R.id.nameText);
         nameText.setText(String.format("Go %s!", userName));    //C way of printing
 
         //progress bar functionality
         ProgressBar progress = findViewById(R.id.determinateBar);
-        if(dailyGoal != null && dailyGoal.length() > 0)   //star_on dailyGoal contains an int
-            goal = Integer.parseInt(dailyGoal);
         progress.setMax(goal);
 
         //activity button
