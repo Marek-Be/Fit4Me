@@ -22,7 +22,7 @@ public class AddActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DatabaseHandler database = new DatabaseHandler(this,null,null,1);
+        DatabaseHandler database = new DatabaseHandler(this,null);
 
         setContentView(R.layout.activity_add);
 

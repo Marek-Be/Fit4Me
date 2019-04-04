@@ -29,7 +29,7 @@ public class DailyData extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_data);
-        db = new DatabaseHandler(this,null,null,1);
+        db = new DatabaseHandler(this,null);
 
         String name = getIntent().getStringExtra("username");
         TextView text = findViewById(R.id.progress_text);
