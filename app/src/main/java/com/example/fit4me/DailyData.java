@@ -54,7 +54,7 @@ public class DailyData extends AppCompatActivity {
         left.setDrawLabels(false);
 
         // custom X-axis labels
-        String[] values = new String[] { "1 star", "2 stars", "3 stars", "4 stars", "5 stars"};
+        String[] values = new String[] { "1st day", "2nd day", "3rd day", "4th day", "5th day","current day"};
         XAxis xAxis = chart.getXAxis();
         xAxis.setValueFormatter(new MyXAxisValueFormatter(values));
 
