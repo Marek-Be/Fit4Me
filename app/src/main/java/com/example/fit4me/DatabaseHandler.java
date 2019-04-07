@@ -4,12 +4,13 @@ package com.example.fit4me;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "fitdata.db";
 
     private static final String DATA_TABLE = "fitdata";
@@ -22,6 +23,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String COLUMN_USERNAME = "user";
     private static final String COLUMN_DAILYGOAL = "dailygoal";
     private static final String COLUMN_STARCOUNT = "stars";
+    private static final String COLUMN_GOAL_REACHED = "reached";
 
 
     public DatabaseHandler(Context context, SQLiteDatabase.CursorFactory factory) {
@@ -45,7 +47,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 COLUMN_ID + " INTEGER PRIMARY KEY, " +
                 COLUMN_USERNAME + " TEXT, " +
                 COLUMN_DAILYGOAL + " INT, " +
-                COLUMN_STARCOUNT + " INT "
+                COLUMN_STARCOUNT + " INT, " +
+                COLUMN_GOAL_REACHED + " INT "
                 +");";
 
         db.execSQL(queryData);
@@ -60,15 +63,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void createAccount(int goal, String username){       //TODO retrieve star count and then save it.
+    public void createAccount(int goal, String username){
         SQLiteDatabase db =this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        int starCount = getStars();
         db.delete(USER_TABLE, "id = 1", null);      //Can only have one account at a time, so delete the old one.
 
         contentValues.put(COLUMN_ID, 1);
         contentValues.put(COLUMN_USERNAME, username);
         contentValues.put(COLUMN_DAILYGOAL, goal);
-        contentValues.put(COLUMN_STARCOUNT, 0);
+        contentValues.put(COLUMN_STARCOUNT, starCount);
+        contentValues.put(COLUMN_GOAL_REACHED, 0);
         db.insert(USER_TABLE, null, contentValues);
     }
 
@@ -107,53 +112,66 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    //TODO set the column to 1 or 0 depending on if the goal has been reached or not
+    public void setGoalReached(boolean goalReached) {
+
+    }
+
+    public boolean getGoalReached() {
+        return false;
+    }
+
     //You need to convert this to an int
     public String getUser() {
         String dbString = "";
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + USER_TABLE + " WHERE 1";
-
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
-
-		if (c.getString(c.getColumnIndex(COLUMN_USERNAME)) != null) {
-			dbString += c.getString((c.getColumnIndex(COLUMN_USERNAME)));
-			dbString += "\n";
-		}
+        try {
+            if (c.getString(c.getColumnIndex(COLUMN_USERNAME)) != null) {
+                dbString += c.getString((c.getColumnIndex(COLUMN_USERNAME)));
+            }
+        }catch(CursorIndexOutOfBoundsException e){}
+        c.close();
         return dbString;
     }
 
     //You need to convert this to an int
-    public String getStars() {
+    public int getStars() {
         String dbString = "";
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + USER_TABLE;
-
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
-		
-		if (c.getString(c.getColumnIndex(COLUMN_STARCOUNT)) != null) {
-			dbString += c.getString((c.getColumnIndex(COLUMN_STARCOUNT)));
-			dbString += "\n";
-		}
-        return dbString;
-    }
-	
 
-    public String getGoal() {
-        String dbString = "";
-        SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + USER_TABLE;
-
-        Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-		
-		if (c.getString(c.getColumnIndex(COLUMN_DAILYGOAL)) != null) {
-			dbString += c.getString((c.getColumnIndex(COLUMN_DAILYGOAL)));
-			dbString += "\n";
-		}
+        try{
+            if (c.getString(c.getColumnIndex(COLUMN_STARCOUNT)) != null) {
+                dbString += c.getString((c.getColumnIndex(COLUMN_STARCOUNT)));
+                Log.i("Database", "Seriously what is going on?");
+                c.close();
+                return Integer.parseInt(dbString);
+            }
+        }catch(CursorIndexOutOfBoundsException e){}
         c.close();
-        return dbString;
+        return 0;
+    }
+
+    public int getGoal() {
+        String dbString = "";
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + USER_TABLE;
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        try {
+            if (c.getString(c.getColumnIndex(COLUMN_DAILYGOAL)) != null) {
+                dbString += c.getString((c.getColumnIndex(COLUMN_DAILYGOAL)));
+                c.close();
+                return Integer.parseInt(dbString);
+            }
+        } catch(CursorIndexOutOfBoundsException e){}
+        c.close();
+        return 0;
     }
 
     //Returns the whole database as a string.
@@ -171,7 +189,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 dbString += c.getString((c.getColumnIndex(COLUMN_GOAL)));
                 dbString += c.getString((c.getColumnIndex(COLUMN_DAILYSTEPS)));
                 dbString += "\n";
-
             }
         }
         return dbString;

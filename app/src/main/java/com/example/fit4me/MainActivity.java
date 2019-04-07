@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity
     private static final int REQUEST_OAUTH = 1;
     private static final int LOAD_TIME = 3000;
     private static final String AUTH_PENDING = "auth_state_pending";
-    private static final String APP_INITIALIZED = "initialized";
 
     private boolean authInProgress = false;
     private GoogleApiClient mApiClient;
@@ -44,14 +43,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            initialized = savedInstanceState.getBoolean(APP_INITIALIZED);
-            if (initialized) {
-                Intent intent = new Intent(MainActivity.this, HomePage.class);
-                startActivity(intent);
-            }
-            authInProgress = savedInstanceState.getBoolean(AUTH_PENDING);
+        DatabaseHandler database = new DatabaseHandler(this,null);
+        String username = database.getUser();
+        Log.i("Database", "Returning user-" + username);
+        if(username.length() > 0){ //If profile already created
+            Intent intent = new Intent(MainActivity.this, HomePage.class);
+            initialized = true;
+            startActivity(intent);
         }
+
+        if (savedInstanceState != null)
+            authInProgress = savedInstanceState.getBoolean(AUTH_PENDING);
         setContentView(R.layout.activity_main);
 
         //logo animation
@@ -82,10 +84,10 @@ public class MainActivity extends AppCompatActivity
 
     protected void onStart() {
         super.onStart();
-        //if(initialized){      //Uncomment to prevent returning to the main menu
-         //   Intent intent = new Intent(MainActivity.this, HomePage.class);
-        //    startActivity(intent);
-        //}
+        if(initialized){      //Prevent users from returning to the page
+           Intent intent = new Intent(MainActivity.this, HomePage.class);
+           startActivity(intent);
+        }
         handler.postDelayed(new Runnable(){
             @Override
             public void run()

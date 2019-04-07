@@ -31,13 +31,10 @@ public class CreateProfile extends AppCompatActivity {
             public void onClick(View v) {
                 if(nameInput.getText() != null && goalInput.getText() != null) {
                     String username = nameInput.getText().toString();
-                    int goal = Integer.parseInt(goalInput.getText().toString());
-                    if (goal != 0 && username != "") {
-                        database.createAccount(goal, username);   //TODO write goal to database here
+                    String goal = goalInput.getText().toString();
+                    if (goal.length() != 0 && username.length() != 0) {
+                        database.createAccount(Integer.parseInt(goalInput.getText().toString()), username);
                         Intent intent = new Intent(CreateProfile.this, HomePage.class);
-                        String[] arguments = {username, goalInput.getText().toString()};
-                        intent.putExtra("Source", "createprofile");
-                        intent.putExtra("arguments", arguments);
                         startActivity(intent);
                     }
                 }
