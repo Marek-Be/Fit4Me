@@ -3,4 +3,8 @@
     <color name="colorPrimary">#FBFBFB</color>
     <color name="colorPrimaryDark">#01A903</color>
     <color name="colorAccent">#1E4604</color>
+    <color name="goalAchieved">#E9FF2B</color>
+    <color name="red">#FF2B2B</color>
+    <color name="green">#71FF2B</color>
+    <color name="blue">#2B83FF</color>
 </resources>

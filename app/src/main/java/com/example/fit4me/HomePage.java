@@ -143,7 +143,8 @@ public class HomePage extends AppCompatActivity{
                             }
                             //else celebration animation - weekly goal reached
                         }
-                        else{
+                        else
+                            Toast.makeText(getApplicationContext(), "Steps taken : " + TOTAL_DAILY_STEPS, Toast.LENGTH_SHORT).show();
                         ProgressBar progress = findViewById(R.id.determinateBar);
                         progress.setProgress(TOTAL_DAILY_STEPS);
                         // **NOTE: avatar movement needs testing
@@ -155,7 +156,6 @@ public class HomePage extends AppCompatActivity{
                     }
                 });
             }
-
         }, 100);
     }
 
