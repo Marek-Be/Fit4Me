@@ -63,7 +63,6 @@ public class HomePage extends AppCompatActivity{
         mApiClient.connect();
 
         //receive arguments from CreateProfile Activity
-        extras = getIntent().getStringArrayExtra("arguments");
         DatabaseHandler database = new DatabaseHandler(this, null);
         final String userName = database.getUser();
         goal = database.getGoal();
