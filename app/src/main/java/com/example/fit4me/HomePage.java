@@ -35,15 +35,12 @@ public class HomePage extends AppCompatActivity{
     private static final String GOOGLE_FIT_TAG = "Google Fit API";
     private static final int[] star_IDs = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
     private static final int STEP_UPDATE_TIME = 20000;  //Every 20 seconds update progress bar.
-    public static final int GET_ACTIVITIES = 1;
-    public String [] extras;
-
+    private static final int GET_ACTIVITIES = 1;
+    private static DatabaseHandler database;
     private GoogleApiClient mApiClient;
 
     private int goal;
     private List<ImageView> stars;
-    private boolean [] goalReached;
-    private int currentStar;
 
     private HandlerThread thread;
     private Handler stepsUpdateHandler;
@@ -63,7 +60,7 @@ public class HomePage extends AppCompatActivity{
         mApiClient.connect();
 
         //receive arguments from CreateProfile Activity
-        DatabaseHandler database = new DatabaseHandler(this, null);
+        database = new DatabaseHandler(this, null);
         final String userName = database.getUser();
         goal = database.getGoal();
         TextView nameText = findViewById(R.id.nameText);
@@ -107,13 +104,11 @@ public class HomePage extends AppCompatActivity{
         stepsUpdateHandler = new Handler(thread.getLooper());
 
         //initially set all days of goal reached to false
-        goalReached = new boolean[star_IDs.length];
-        for(int i = 0; i < goalReached.length; i++)
-            goalReached[i] = false;
-        currentStar = 0;
+        int starCount = database.getStars();
+        for(int i = 0; i < starCount; i++)
+            stars.get(i).setImageResource(android.R.drawable.btn_star_big_on);
 
         ImageView [] setStickers = {findViewById(R.id.footballsticker),findViewById(R.id.swimsticker),findViewById(R.id.bballsticker), findViewById(R.id.cyclesticker)};
-
     }
 
     @Override
@@ -130,12 +125,14 @@ public class HomePage extends AppCompatActivity{
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(TOTAL_DAILY_STEPS > goal) {   //TODO put code for when they have achieved their goal here
+                        if(TOTAL_DAILY_STEPS > goal) {
                             Toast.makeText(getApplicationContext(), "Congratulations. You have reached your goal.  Steps taken : "
                                     + TOTAL_DAILY_STEPS, Toast.LENGTH_SHORT).show();
                             //change star image for the day
-                            if(currentStar < star_IDs.length) {
-                                goalReached[currentStar]=true;
+                            int currentStar = database.getStars()+1;
+                            if(!(database.getGoalReached()) && currentStar < star_IDs.length) {
+                                database.setStars(currentStar);
+                                database.setGoalReached(true);
                                 //**NOTE: needs testing
                                 stars.get(currentStar).setImageResource(android.R.drawable.btn_star_big_on);
                                 currentStar++;
@@ -188,8 +185,7 @@ public class HomePage extends AppCompatActivity{
             Log.i("Activities", "Well that is something");
             ImageView [] setStickers = {findViewById(R.id.footballsticker),findViewById(R.id.swimsticker),findViewById(R.id.bballsticker), findViewById(R.id.cyclesticker)};
             //initially reset activities stickers to white
-            for(int i = 0; i < setStickers.length; i++)
-            {
+            for(int i = 0; i < setStickers.length; i++) {
                 setStickers[i].setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.colorPrimary));
             }
             boolean[] activities = data.getBooleanArrayExtra("Activities");

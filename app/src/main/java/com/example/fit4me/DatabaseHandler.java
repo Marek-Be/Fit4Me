@@ -108,17 +108,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_USERNAME, username);
         SQLiteDatabase db = getWritableDatabase();
-        db.update(DATA_TABLE, values, "id=1", null);
+        db.update(USER_TABLE, values, "id=1", null);
         db.close();
     }
 
-    //TODO set the column to 1 or 0 depending on if the goal has been reached or not
     public void setGoalReached(boolean goalReached) {
-
+        ContentValues values = new ContentValues();
+        int value = goalReached ? 1 : 0;
+        values.put(COLUMN_USERNAME, value);
+        SQLiteDatabase db = getWritableDatabase();
+        db.update(USER_TABLE, values, "id=1", null);
+        db.close();
     }
 
     public boolean getGoalReached() {
-        return false;
+        String dbString = "";
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + USER_TABLE + " WHERE 1";
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        try {
+            if (c.getString(c.getColumnIndex(COLUMN_GOAL_REACHED)) != null) {
+                dbString += c.getString((c.getColumnIndex(COLUMN_GOAL_REACHED)));
+            }
+        }catch(CursorIndexOutOfBoundsException e){return false;}
+        c.close();
+        return Integer.parseInt(dbString) == 1;
     }
 
     //You need to convert this to an int
@@ -148,9 +163,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         try{
             if (c.getString(c.getColumnIndex(COLUMN_STARCOUNT)) != null) {
                 dbString += c.getString((c.getColumnIndex(COLUMN_STARCOUNT)));
-                Log.i("Database", "Seriously what is going on?");
                 c.close();
-                return Integer.parseInt(dbString);
+                return Integer.parseInt(dbString);  //return real value
             }
         }catch(CursorIndexOutOfBoundsException e){}
         c.close();
@@ -173,6 +187,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         c.close();
         return 0;
     }
+
+    public int getStepsOnDate(String date){
+        String dbString = "";
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + DATA_TABLE + " WHERE " + COLUMN_DATE + " = " + date;
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        try{
+            Log.i("Debugging", "here he go");
+            if (c.getString(c.getColumnIndex(COLUMN_DAILYSTEPS)) != null) {
+                dbString += c.getString((c.getColumnIndex(COLUMN_DAILYSTEPS)));
+                Log.i("Debugging", dbString);
+                c.close();
+                return Integer.parseInt(dbString);
+            }
+        }catch(CursorIndexOutOfBoundsException e){}
+        c.close();
+        return 0;
+    }
+
 
     //Returns the whole database as a string.
     public String daysToString() {

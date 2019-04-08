@@ -44,13 +44,15 @@ public class AlarmReceiver extends BroadcastReceiver {
 
             int goal = database.getGoal();
             database.addDay(todaysDate,todaysSteps,goal);
-            if(todaysSteps >= goal){
-                int star = database.getStars();
-                if(star < 5)
-                    database.setStars(star+1);
+            if(!database.getGoalReached()) {
+                if (todaysSteps >= goal) {
+                    int star = database.getStars();
+                    if (star < 5)
+                        database.setStars(star + 1);
+                } else
+                    database.setStars(0);
             }
-            else
-                database.setStars(0);
+            database.setGoalReached(false);
             return null;
         }
     }
