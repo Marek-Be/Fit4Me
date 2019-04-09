@@ -36,7 +36,7 @@ public class HomePage extends AppCompatActivity{
     private static final int[] star_IDs = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
     private static final int STEP_UPDATE_TIME = 20000;  //Every 20 seconds update progress bar.
     private static final int GET_ACTIVITIES = 1;
-    private static DatabaseHandler database;
+    private DatabaseHandler database;
     private GoogleApiClient mApiClient;
 
     private int goal;
@@ -49,7 +49,6 @@ public class HomePage extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        //myProgress = progress;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 

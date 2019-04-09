@@ -188,24 +188,50 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return 0;
     }
 
-    public int getStepsOnDate(String date){
+    public int[] getGoals(){
         String dbString = "";
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + DATA_TABLE + " WHERE " + COLUMN_DATE + " = " + date;
-        Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-
-        try{
-            Log.i("Debugging", "here he go");
-            if (c.getString(c.getColumnIndex(COLUMN_DAILYSTEPS)) != null) {
-                dbString += c.getString((c.getColumnIndex(COLUMN_DAILYSTEPS)));
-                Log.i("Debugging", dbString);
-                c.close();
-                return Integer.parseInt(dbString);
+        String query = "SELECT " + "*" + " FROM " + DATA_TABLE + ";";
+        Log.i("Debugging", query);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                String goal = cursor.getString(cursor.getColumnIndex(COLUMN_GOAL));
+                dbString += " " + goal;
+                cursor.moveToNext();
             }
-        }catch(CursorIndexOutOfBoundsException e){}
-        c.close();
-        return 0;
+        }
+        Log.i("Debugging", dbString);
+        int [] days = new int[5];
+        int index = 0;
+        String[] allDays = dbString.split(" ");
+        for(int i = allDays.length-1; i >= 0 && index < 5; i--)
+            if(allDays[i].length() > 0)
+                days[index++] = Integer.parseInt(allDays[i]);
+        return days;
+    }
+
+    public int[] getSteps(){
+        String dbString = "";
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT " + "*" + " FROM " + DATA_TABLE + ";";
+        Log.i("Debugging", query);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                String steps = cursor.getString(cursor.getColumnIndex(COLUMN_DAILYSTEPS));
+                dbString += " " + steps;
+                cursor.moveToNext();
+            }
+        }
+        Log.i("Debugging", dbString);
+        int [] days = new int[5];
+        int index = 0;
+        String[] allDays = dbString.split(" ");
+        for(int i = allDays.length-1; i >= 0 && index < 5; i--)
+            if(allDays[i].length() > 0)
+                days[index++] = Integer.parseInt(allDays[i]);
+        return days;
     }
 
 
@@ -213,7 +239,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public String daysToString() {
         String dbString = "";
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + DATA_TABLE + " WHERE 1";
+        String query = "SELECT * FROM " + DATA_TABLE ;
 
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
