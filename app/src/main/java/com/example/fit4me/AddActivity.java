@@ -28,7 +28,7 @@ public class AddActivity extends AppCompatActivity {
 
         String name = getIntent().getStringExtra("username");
         TextView text = findViewById(R.id.activity_text);
-        text.setText(String.format("%s's Activities Today", name));
+        text.setText("Activities Today");
 
         applyButton = findViewById(R.id.apply);
         applyButton.setOnClickListener(new View.OnClickListener() {

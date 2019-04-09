@@ -12,11 +12,10 @@ import android.widget.RadioButton;
 public class CreateProfile extends AppCompatActivity {
 
     private Button button;
-    private EditText nameInput;
     private String goal;
     public static final String BRONZE_GOAL = "4000";
-    public static final String SILVER_GOAL = "4000";
-    public static final String GOLD_GOAL = "4000";
+    public static final String SILVER_GOAL = "8000";
+    public static final String GOLD_GOAL = "12000";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,16 +28,9 @@ public class CreateProfile extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(nameInput.getText() != null) {
-                    String username = nameInput.getText().toString();
-                    //String goal = goalInput.getText().toString();
-                    if (goal.length() != 0 && username.length() != 0) {
-                        //database.createAccount(Integer.parseInt(goalInput.getText().toString()), username);
-                        database.createAccount(Integer.parseInt(goal), username);
-                        Intent intent = new Intent(CreateProfile.this, HomePage.class);
-                        startActivity(intent);
-                    }
-                }
+                database.createAccount(Integer.parseInt(goal), "");
+                Intent intent = new Intent(CreateProfile.this, HomePage.class);
+                startActivity(intent);
             }
         });
     }
