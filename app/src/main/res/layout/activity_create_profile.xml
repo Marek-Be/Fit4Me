@@ -47,6 +47,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
         app:layout_constraintRight_toRightOf="@+id/right_guideline" />
 
+
     <Button
         android:id="@+id/button2"
         style="@style/Widget.AppCompat.Button.Colored"
@@ -71,11 +72,11 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/backgroundimage"
-        app:layout_constraintHorizontal_bias="0.197"
+        app:layout_constraintHorizontal_bias="0.201"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
         app:layout_constraintRight_toRightOf="@+id/right_guideline"
         app:layout_constraintTop_toTopOf="@+id/backgroundimage"
-        app:layout_constraintVertical_bias="0.221" />
+        app:layout_constraintVertical_bias="0.053" />
 
     <ImageView
         android:id="@+id/backgroundimage"
@@ -95,11 +96,12 @@
 
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_width="250dp"
-        android:layout_height="65dp"
-        android:layout_marginBottom="20dp"
+        android:layout_width="252dp"
+        android:layout_height="94dp"
+        android:layout_marginBottom="56dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/goallevel"
         app:layout_constraintBottom_toBottomOf="@+id/backgroundimage"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
@@ -107,10 +109,9 @@
 
         <RadioButton
             android:id="@+id/bronze"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="10dp"
             android:background="@drawable/medal"
             android:backgroundTint="#cd7f32"
             android:buttonTint="@color/colorPrimary"
@@ -118,10 +119,9 @@
 
         <RadioButton
             android:id="@+id/silver"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="10dp"
             android:background="@drawable/medal"
             android:backgroundTint="#C0C0C0"
             android:buttonTint="@color/colorPrimary"
@@ -129,8 +129,8 @@
 
         <RadioButton
             android:id="@+id/gold"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_gravity="center_vertical"
             android:background="@drawable/medal"
             android:backgroundTint="#FFD700"
@@ -139,7 +139,7 @@
     </RadioGroup>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/goallevel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -153,9 +153,9 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/radioGroup"
         app:layout_constraintEnd_toEndOf="@+id/backgroundimage"
-        app:layout_constraintHorizontal_bias="0.136"
+        app:layout_constraintHorizontal_bias="0.139"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
         app:layout_constraintTop_toBottomOf="@+id/nameInput"
-        app:layout_constraintVertical_bias="0.894" />
+        app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

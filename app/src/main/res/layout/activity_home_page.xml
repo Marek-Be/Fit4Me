@@ -42,21 +42,6 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.9" />
 
-    <TextView
-        android:id="@+id/nameText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textColor="@color/colorAccent"
-        android:textSize="28sp"
-        app:fontFamily="@font/amaranth"
-        app:layout_constraintBottom_toBottomOf="@+id/bottom_guideline"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
-        app:layout_constraintRight_toRightOf="@+id/right_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/top_guideline"
-        app:layout_constraintVertical_bias="0.189" />
-
     <ProgressBar
         android:id="@+id/determinateBar"
         style="@android:style/Widget.ProgressBar.Horizontal"
@@ -84,12 +69,12 @@
         app:srcCompat="@drawable/ic_action_name" />
 
     <Button
-        android:id="@+id/addactivity"
-        android:layout_width="100dp"
-        android:layout_height="66dp"
+        android:id="@+id/editprofile"
+        android:layout_width="75dp"
+        android:layout_height="65dp"
         android:layout_marginTop="472dp"
         android:background="@drawable/curvedbutton2"
-        android:text="ADD ACTIVITY"
+        android:text="EDIT PROFILE"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/bottom_guideline2"
@@ -98,9 +83,26 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <Button
+        android:id="@+id/addactivity"
+        android:layout_width="81dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="472dp"
+        android:background="@drawable/curvedbutton2"
+        android:text="ADD ACTIVITY"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/bottom_guideline2"
+        app:layout_constraintTop_toTopOf="@+id/bottom_guideline"
+        app:layout_constraintLeft_toRightOf="@+id/editprofile"
+        app:layout_constraintRight_toLeftOf="@+id/trackprogress"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="138dp" />
+
+
+    <Button
         android:id="@+id/trackprogress"
-        android:layout_width="100dp"
-        android:layout_height="66dp"
+        android:layout_width="78dp"
+        android:layout_height="65dp"
         android:layout_marginTop="472dp"
         android:background="@drawable/curvedbutton2"
         android:text="TRACK PROGRESS"
@@ -178,11 +180,11 @@
         android:layout_marginTop="292dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.13"
+        app:layout_constraintHorizontal_bias="0.242"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
         app:layout_constraintRight_toRightOf="@+id/right_guideline"
         app:layout_constraintTop_toTopOf="@+id/top_guideline"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.897"
         app:srcCompat="@drawable/homebackground" />
 
     <ImageView

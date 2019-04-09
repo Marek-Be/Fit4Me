@@ -13,7 +13,6 @@ public class CreateProfile extends AppCompatActivity {
 
     private Button button;
     private EditText nameInput;
-    private EditText goalInput;
     private String goal;
     public static final String BRONZE_GOAL = "4000";
     public static final String SILVER_GOAL = "4000";
@@ -27,12 +26,10 @@ public class CreateProfile extends AppCompatActivity {
 
         //button functionality to HomePage activity
         button = findViewById(R.id.button2);
-        nameInput = findViewById(R.id.nameInput);
-        nameInput.bringToFront();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(nameInput.getText() != null && goalInput.getText() != null) {
+                if(nameInput.getText() != null) {
                     String username = nameInput.getText().toString();
                     //String goal = goalInput.getText().toString();
                     if (goal.length() != 0 && username.length() != 0) {

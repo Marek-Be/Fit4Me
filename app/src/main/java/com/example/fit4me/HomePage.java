@@ -62,12 +62,20 @@ public class HomePage extends AppCompatActivity{
         database = new DatabaseHandler(this, null);
         final String userName = database.getUser();
         goal = database.getGoal();
-        TextView nameText = findViewById(R.id.nameText);
-        nameText.setText(String.format("Go %s!", userName));    //C way of printing
 
         //progress bar functionality
         ProgressBar progress = findViewById(R.id.determinateBar);
         progress.setMax(goal);
+
+        //editprofile button
+        Button editButton = findViewById(R.id.editprofile);
+        editButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(HomePage.this, CreateProfile.class);
+                startActivity(intent);
+            }
+        });
 
         //activity button
         Button activityButton = findViewById(R.id.addactivity);
@@ -107,7 +115,6 @@ public class HomePage extends AppCompatActivity{
         for(int i = 0; i < starCount; i++)
             stars.get(i).setImageResource(android.R.drawable.btn_star_big_on);
 
-        ImageView [] setStickers = {findViewById(R.id.footballsticker),findViewById(R.id.swimsticker),findViewById(R.id.bballsticker), findViewById(R.id.cyclesticker)};
     }
 
     @Override
