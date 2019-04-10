@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -45,7 +44,6 @@ public class HomePage extends AppCompatActivity{
     private HandlerThread thread;
     private Handler stepsUpdateHandler;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -58,16 +56,13 @@ public class HomePage extends AppCompatActivity{
                 .build();
         mApiClient.connect();
 
-        //receive arguments from CreateProfile Activity
         database = new DatabaseHandler(this, null);
-        final String userName = database.getUser();
-        goal = database.getGoal();
+        goal = database.getGoal(); //load goal from database
 
-        //progress bar functionality
         ProgressBar progress = findViewById(R.id.determinateBar);
-        progress.setMax(goal);
+        progress.setMax(goal); //progress bar
 
-        //editprofile button
+        //edit profile button
         Button editButton = findViewById(R.id.editprofile);
         editButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -83,18 +78,16 @@ public class HomePage extends AppCompatActivity{
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(HomePage.this, AddActivity.class);
-                intent.putExtra("username", userName);
                 startActivityForResult(intent, GET_ACTIVITIES);
             }
         });
 
-        //trackprogress button
+        //track progress button
         Button progressButton = findViewById(R.id.trackprogress);
         progressButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(HomePage.this, DailyData.class);
-                intent.putExtra("username", userName);
                 startActivity(intent);
             }
         });
@@ -106,15 +99,13 @@ public class HomePage extends AppCompatActivity{
             stars.add(star);
         }
 
-        thread = new HandlerThread("MyHandlerThread");
-        thread.start();
-        stepsUpdateHandler = new Handler(thread.getLooper());
-
-        //initially set all days of goal reached to false
-        int starCount = database.getStars();
+        int starCount = database.getStars();//initially all days of goal reached are false
         for(int i = 0; i < starCount; i++)
             stars.get(i).setImageResource(android.R.drawable.btn_star_big_on);
 
+        thread = new HandlerThread("MyHandlerThread");
+        thread.start();
+        stepsUpdateHandler = new Handler(thread.getLooper());
     }
 
     @Override
@@ -134,23 +125,20 @@ public class HomePage extends AppCompatActivity{
                         if(TOTAL_DAILY_STEPS > goal) {
                             Toast.makeText(getApplicationContext(), "Congratulations. You have reached your goal.  Steps taken : "
                                     + TOTAL_DAILY_STEPS, Toast.LENGTH_SHORT).show();
-                            //change star image for the day
-                            int currentStar = database.getStars()+1;
-                            if(!(database.getGoalReached()) && currentStar < star_IDs.length) {
-                                database.setStars(currentStar);
-                                database.setGoalReached(true);
-                                //**NOTE: needs testing
-                                stars.get(currentStar).setImageResource(android.R.drawable.btn_star_big_on);
-                                currentStar++;
+                            if(!(database.getGoalReached())) {
+                                int currentStar = database.getStars() + 1;
+                                if (currentStar <= star_IDs.length) {
+                                    database.setStars(currentStar); //change star image for the day
+                                    database.setGoalReached(true);
+                                    stars.get(currentStar-1).setImageResource(android.R.drawable.btn_star_big_on); 
+                                }
                             }
-                            //else celebration animation - weekly goal reached
                         }
                         else
                             Toast.makeText(getApplicationContext(), "Steps taken : " + TOTAL_DAILY_STEPS, Toast.LENGTH_SHORT).show();
                         ProgressBar progress = findViewById(R.id.determinateBar);
                         progress.setProgress(TOTAL_DAILY_STEPS);
-                        // **NOTE: avatar movement needs testing
-                        // get avatar X coordinates moving with progress bar
+                        // TODO: avatar movement needs testing. Get avatar X coordinates moving with progress bar
                         ImageView avatar = findViewById(R.id.avatar);
                         ObjectAnimator animator = ObjectAnimator.ofFloat(avatar, "translationX", 350f);
                         animator.setDuration(5000);
@@ -190,13 +178,12 @@ public class HomePage extends AppCompatActivity{
         if (resultCode == RESULT_OK && requestCode == GET_ACTIVITIES) {
             Log.i("Activities", "Well that is something");
             ImageView [] setStickers = {findViewById(R.id.footballsticker),findViewById(R.id.swimsticker),findViewById(R.id.bballsticker), findViewById(R.id.cyclesticker)};
-            //initially reset activities stickers to white
-            for(int i = 0; i < setStickers.length; i++) {
+
+            for(int i = 0; i < setStickers.length; i++) //initially reset activities stickers to white
                 setStickers[i].setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.colorPrimary));
-            }
             boolean[] activities = data.getBooleanArrayExtra("Activities");
-            //set selected activities stickers to green
-            for(int i = 0; i < activities.length; i++) {
+
+            for(int i = 0; i < activities.length; i++) { //set selected activities stickers to green
                 if(activities[i]) {
                     Log.i("Activities", "Activity marked " + i);
                     setStickers[i].setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.colorAccent));

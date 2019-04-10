@@ -22,6 +22,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent){
         this.context = context;
+        Log.i("Alarm Receiver", "Saving today's steps.");
         mApiClient = new GoogleApiClient.Builder(context) //Set up API client to read information
                 .addApi(Fitness.HISTORY_API)
                 .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ))
@@ -49,10 +50,11 @@ public class AlarmReceiver extends BroadcastReceiver {
                     int star = database.getStars();
                     if (star < 5)
                         database.setStars(star + 1);
-                } else
-                    database.setStars(0);
+                }
+                else
+                    database.setStars(0);       //Missed the goal reset the star count
             }
-            database.setGoalReached(false);
+            database.setGoalReached(false);     //Tomorrow goal is unreached
             return null;
         }
     }

@@ -1,4 +1,3 @@
-    
 package com.example.fit4me;
 
 import android.content.ContentValues;
@@ -10,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "fitdata.db";
 
     private static final String DATA_TABLE = "fitdata";
@@ -20,7 +19,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String COLUMN_GOAL = "goal";
 	
 	private static final String USER_TABLE = "usernamedata";
-    private static final String COLUMN_USERNAME = "user";
     private static final String COLUMN_DAILYGOAL = "dailygoal";
     private static final String COLUMN_STARCOUNT = "stars";
     private static final String COLUMN_GOAL_REACHED = "reached";
@@ -45,7 +43,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         queryUser += "CREATE TABLE " + USER_TABLE + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY, " +
-                COLUMN_USERNAME + " TEXT, " +
                 COLUMN_DAILYGOAL + " INT, " +
                 COLUMN_STARCOUNT + " INT, " +
                 COLUMN_GOAL_REACHED + " INT "
@@ -63,17 +60,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void createAccount(int goal, String username){
+    public void createAccount(int goal){
         SQLiteDatabase db =this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         int starCount = getStars();
+        int goalReached = getGoalReached() ? 1 : 0;
         db.delete(USER_TABLE, "id = 1", null);      //Can only have one account at a time, so delete the old one.
 
         contentValues.put(COLUMN_ID, 1);
-        contentValues.put(COLUMN_USERNAME, username);
         contentValues.put(COLUMN_DAILYGOAL, goal);
         contentValues.put(COLUMN_STARCOUNT, starCount);
-        contentValues.put(COLUMN_GOAL_REACHED, 0);
+        contentValues.put(COLUMN_GOAL_REACHED, goalReached);
         db.insert(USER_TABLE, null, contentValues);
     }
 
@@ -88,14 +85,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void setGoal(int goal) {
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_DAILYGOAL, goal);
-        SQLiteDatabase db = getWritableDatabase();
-        db.update(USER_TABLE, values, "id=1", null);
-        db.close();
-    }
-
     public void setStars(int stars) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_STARCOUNT, stars);
@@ -104,18 +93,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void setUser(String username) {
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_USERNAME, username);
-        SQLiteDatabase db = getWritableDatabase();
-        db.update(USER_TABLE, values, "id=1", null);
-        db.close();
-    }
-
     public void setGoalReached(boolean goalReached) {
         ContentValues values = new ContentValues();
         int value = goalReached ? 1 : 0;
-        values.put(COLUMN_USERNAME, value);
+        values.put(COLUMN_GOAL_REACHED, value);
         SQLiteDatabase db = getWritableDatabase();
         db.update(USER_TABLE, values, "id=1", null);
         db.close();
@@ -128,28 +109,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
         try {
-            if (c.getString(c.getColumnIndex(COLUMN_GOAL_REACHED)) != null) {
+            if (c.getString(c.getColumnIndex(COLUMN_GOAL_REACHED)) != null)
                 dbString += c.getString((c.getColumnIndex(COLUMN_GOAL_REACHED)));
-            }
         }catch(CursorIndexOutOfBoundsException e){return false;}
         c.close();
+        Log.i("Database", ""+dbString);
         return Integer.parseInt(dbString) == 1;
-    }
-
-    //You need to convert this to an int
-    public String getUser() {
-        String dbString = "";
-        SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + USER_TABLE + " WHERE 1";
-        Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-        try {
-            if (c.getString(c.getColumnIndex(COLUMN_USERNAME)) != null) {
-                dbString += c.getString((c.getColumnIndex(COLUMN_USERNAME)));
-            }
-        }catch(CursorIndexOutOfBoundsException e){}
-        c.close();
-        return dbString;
     }
 
     //You need to convert this to an int
@@ -188,43 +153,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return 0;
     }
 
-    public int[] getGoals(){
-        String dbString = "";
-        SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT " + "*" + " FROM " + DATA_TABLE + ";";
-        Log.i("Debugging", query);
-        Cursor cursor = db.rawQuery(query, null);
-        if (cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()) {
-                String goal = cursor.getString(cursor.getColumnIndex(COLUMN_GOAL));
-                dbString += " " + goal;
-                cursor.moveToNext();
-            }
-        }
-        Log.i("Debugging", dbString);
-        int [] days = new int[5];
-        int index = 0;
-        String[] allDays = dbString.split(" ");
-        for(int i = allDays.length-1; i >= 0 && index < 5; i--)
-            if(allDays[i].length() > 0)
-                days[index++] = Integer.parseInt(allDays[i]);
-        return days;
+    public int[] getPastGoals(){
+        return getPastDaysInfo(COLUMN_GOAL);
     }
 
     public int[] getSteps(){
+        return getPastDaysInfo(COLUMN_DAILYSTEPS);
+    }
+
+    private int[] getPastDaysInfo(String column){
         String dbString = "";
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT " + "*" + " FROM " + DATA_TABLE + ";";
-        Log.i("Debugging", query);
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
-                String steps = cursor.getString(cursor.getColumnIndex(COLUMN_DAILYSTEPS));
+                String steps = cursor.getString(cursor.getColumnIndex(column));
                 dbString += " " + steps;
                 cursor.moveToNext();
             }
         }
-        Log.i("Debugging", dbString);
+        cursor.close();
         int [] days = new int[5];
         int index = 0;
         String[] allDays = dbString.split(" ");
@@ -234,8 +183,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return days;
     }
 
-
-    //Returns the whole database as a string.
+    //Returns the whole DATA_TABLE as a string.
     public String daysToString() {
         String dbString = "";
         SQLiteDatabase db = getWritableDatabase();
@@ -246,12 +194,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         while (!c.isAfterLast()) {
             if (c.getString(c.getColumnIndex(COLUMN_DATE)) != null) {
-                dbString += c.getString((c.getColumnIndex(COLUMN_DATE)));
-                dbString += c.getString((c.getColumnIndex(COLUMN_GOAL)));
-                dbString += c.getString((c.getColumnIndex(COLUMN_DAILYSTEPS)));
-                dbString += "\n";
+                dbString += c.getString((c.getColumnIndex(COLUMN_DATE))) + c.getString((c.getColumnIndex(COLUMN_GOAL)))
+                        + c.getString((c.getColumnIndex(COLUMN_DAILYSTEPS))) + "\n";
             }
         }
+        c.close();
         return dbString;
     }
 }

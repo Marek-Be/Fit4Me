@@ -44,9 +44,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DatabaseHandler database = new DatabaseHandler(this,null);
-        String username = database.getUser();
-        Log.i("Database", "Returning user-" + username);
-        if(username.length() > 0){ //If profile already created
+        int goal = database.getGoal();
+        if(goal > 0){ //If profile already created
+            Log.i("Database", "Returning user");
             Intent intent = new Intent(MainActivity.this, HomePage.class);
             initialized = true;
             startActivity(intent);
