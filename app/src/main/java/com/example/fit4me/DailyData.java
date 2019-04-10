@@ -102,6 +102,8 @@ public class DailyData extends AppCompatActivity {
             stepCount = (float) steps[i];
             goal = (float) goals[i];
             stepPercent = Math.min((stepCount/goal)*100, 100);
+            if (Float.isNaN(stepPercent))   //Make sure stepPercent isn't a NaN
+                stepPercent = 0;
             v1e = new BarEntry((float) (4-i), stepPercent); //y axis and x axis are other way around
             valueSet1.add(v1e);
         }
